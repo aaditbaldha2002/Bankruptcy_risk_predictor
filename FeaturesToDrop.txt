@@ -1,0 +1,29 @@
+RandD expense rate
+Interest-bearing-debt-interest-rate
+Allocation rate per person
+Remove Net value per Share columns
+Per Share Net profit before tax (Yuan ¥)
+Non-industry income and expenditure/revenue
+Revenue per person
+Operating profit per person
+Net Income Flag
+Cash Flow per Share
+Operating Expense Rate
+Tax Rate(A)
+Revenue Per Share
+Fixed Assets Turnover Frequency
+Inventory Turnover Rate (times)
+Net Worth Turnover Rate (times)
+Total Asset Turnover
+Accounts Receivable Turnover
+Average Collection Days
+Current Assets Turnover Rate
+Quick Asset Turnover Rate
+Cash Turnover Rate
+Total Assets to GNP Price
+Inventory and accounts receivable/Net value
+Inventory/Working Capital
+Inventory/Current Liability
+
+Part-Whole ratios to check
+[Working Capital to Total Assets, Quick Assets/Total Assets, Current Assets/Total Assets, Cash/Total Assets]
