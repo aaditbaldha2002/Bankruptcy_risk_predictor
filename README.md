@@ -17,22 +17,6 @@ This machine learning project is designed to assess bankruptcy risk in corporate
 
 > ⚠️ *All sensitive configurations and deployments are handled through secure secrets management and CI/CD pipelines.*
 
----
-
-## Data-Feature Description
-
-The anonymized dataset contains historical financial KPIs and audit-related indicators sourced from public filings and secure data vaults. Key features include:
-
-- **Liquidity Metrics**: Current Ratio, Quick Ratio  
-- **Profitability Indicators**: Return on Assets, Operating Margin  
-- **Debt Ratios**: Debt-to-Equity, Interest Coverage  
-- **Audit Flags**: Historical compliance deviations  
-- **Other Derived Features**: Sector-adjusted ratios, trend-based indicators
-
-All features were cleaned, normalized, and versioned using reproducible ETL scripts.
-
----
-
 ## Models Used
 
 - **Logistic Regression** – Baseline classifier for benchmarking  
