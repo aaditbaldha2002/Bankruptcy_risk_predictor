@@ -17,6 +17,14 @@ This machine learning project is designed to assess bankruptcy risk in corporate
 
 > ⚠️ *All sensitive configurations and deployments are handled through secure secrets management and CI/CD pipelines.*
 
+---
+
+## Data-Feature Description
+
+The complete semantic description of each of the feature columns is in the file data/feature_dictionary.csv
+
+---
+
 ## Models Used
 
 - **Logistic Regression** – Baseline classifier for benchmarking  
@@ -30,13 +38,33 @@ Each model is trained with cross-validation and hyperparameter tuning. Productio
 
 ## Data Analysis Process
 
-- Descriptive statistics and financial signal profiling  
-- Outlier detection using IQR and Mahalanobis distance  
-- Multicollinearity analysis via VIF scores  
-- Dimensionality reduction (PCA, t-SNE) for clustering insights  
-- Trend and seasonality detection on time-indexed financial features
+- Descriptive statistics and financial signal profiling
+- colinearity detection using Pearson Correlation Matrix, VIF
+- Manually dropping feature columns and dimensionality reduction with the help of PCA
+- Checking presence of higher level collinearity using condition number metric   
+- Outlier detection using visualizations 
+- Clustering Process for Cluster prediction models as well as pattern revelations made by the clustering process
+- Respective visualizations for each of the clusters for explaining causes of the cluster formation
 
 All analysis steps are documented and conducted in isolated compute environments.
+
+---
+
+## Data Segregation Pipeline
+
+- KMeans Clustering implemented for the formation of the clusters
+- XGB Classifier model used for cluster label prediction
+- Separating dataset with respect to the predicted cluster labels
+
+---
+
+## Model Training and Prediction Pipeline
+
+- Separate models for each of the clusters
+- models trained on the separate cluster dataset
+- Final testing dataset segregated using trained cluster label prediction model based on the cluster labels made using inference
+- models trained on the cluster dataset predicts the target on the respective cluster dataset
+- Final testing dataset prediction joined together for final results
 
 ---
 
