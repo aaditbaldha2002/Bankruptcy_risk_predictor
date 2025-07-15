@@ -23,19 +23,19 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
         raise
 
     try:
-        classification_model = train_classification_model_step(clustered_data_paths[0])
+        train_classification_model_step(clustered_data_paths[0])
     except Exception as e:
         logging.error(f"[Step: Train Classification] Failed to train classification model: {e}", exc_info=True)
         raise
 
     try:
-        regressor_models = train_regressor_model_step(clustered_data_paths[1:])
+        train_regressor_model_step(clustered_data_paths[1:])
     except Exception as e:
         logging.error(f"[Step: Train Regression Models] Failed to train regression models: {e}", exc_info=True)
         raise
 
     try:
-        metrics = evaluation_step(test_data_path, classification_model, regressor_models)
+        metrics = evaluation_step(test_data_path)
     except Exception as e:
         logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
         raise
