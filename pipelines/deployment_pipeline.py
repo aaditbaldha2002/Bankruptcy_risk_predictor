@@ -2,7 +2,7 @@ import logging
 import pandas as pd
 from zenml.pipelines import pipeline
 
-from steps import cluster_prediction_step
+from steps.cluster_prediction_step import cluster_prediction_step
 from steps.evaluation_step import evaluation_step
 from steps.preprocess_step import preprocess_step
 from steps.train_classification_model_step import train_classification_model_step
@@ -17,19 +17,19 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
         raise
 
     try:
-        clustered_data_path = cluster_prediction_step(clean_data_path)
+        clustered_data_paths = cluster_prediction_step(clean_data_path)
     except Exception as e:
         logging.error(f"[Step: Cluster Prediction] Failed to cluster data: {e}", exc_info=True)
         raise
 
     try:
-        classification_model = train_classification_model_step(clustered_data_path[0])
+        classification_model = train_classification_model_step(clustered_data_paths[0])
     except Exception as e:
         logging.error(f"[Step: Train Classification] Failed to train classification model: {e}", exc_info=True)
         raise
 
     try:
-        regressor_models = train_regressor_model_step(clustered_data_path[1:])
+        regressor_models = train_regressor_model_step(clustered_data_paths[1:])
     except Exception as e:
         logging.error(f"[Step: Train Regression Models] Failed to train regression models: {e}", exc_info=True)
         raise
@@ -39,3 +39,5 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
     except Exception as e:
         logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
         raise
+
+    # based on the metrics deploy the models
