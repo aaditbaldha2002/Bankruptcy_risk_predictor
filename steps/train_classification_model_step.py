@@ -11,7 +11,7 @@ import mlflow.sklearn
 logger = logging.getLogger(__name__)
 
 @step(enable_cache=True)
-def train_classification_model_step(data_path: str) -> ClassifierMixin:
+def train_classification_model_step(data_path: str) -> str:
     try:
         logger.info("Reading dataset...")
         df = pd.read_csv(data_path)
@@ -78,7 +78,8 @@ def train_classification_model_step(data_path: str) -> ClassifierMixin:
         mlflow.set_tracking_uri(get_tracking_uri())
         mlflow.set_experiment("classification-model-training")
 
-        with mlflow.start_run(run_name="XGB-Classification-Tuned"):
+        with mlflow.start_run(run_name="XGB-Classification-Tuned") as run:
+
             logger.info("Training reduced model...")
             grid_search_r.fit(X_train_r, y_train_r)
             logger.info("Evaluating performance...")
@@ -101,9 +102,11 @@ def train_classification_model_step(data_path: str) -> ClassifierMixin:
 
             # Log model
             mlflow.sklearn.log_model(grid_search_r.best_estimator_, "xgb_classifier_model")
+            run_id = run.info.run_id
+            classifier_model_uri=f'runs:/{run_id}/classifier_model'
 
         logger.info("Training and tracking complete.")
-        return grid_search_r.best_estimator_
+        return classifier_model_uri
 
     except Exception as e:
         logger.error(f"Error in train_classification_model_step: {e}")
