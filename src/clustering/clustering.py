@@ -40,7 +40,7 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
     try:
         cluster_dfs = []
         cluster_file_paths = []
-        base_dir = 'data/intermediate'
+        base_dir = 'artifacts/clustering'
         os.makedirs(base_dir, exist_ok=True)
 
         clustering_file_path = os.path.join(base_dir, 'clustering_intermediate_train_data.csv')

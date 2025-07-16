@@ -24,11 +24,11 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
         logging.error(f"[Step: Preprocess] Failed to preprocess training data: {e}", exc_info=True)
         raise
 
-    # try:
-    #     cluster_labeled_file_path,cluster_file_paths = cluster_prediction_step(clean_data_path)
-    # except Exception as e:
-    #     logging.error(f"[Step: Cluster Prediction] Failed to cluster data: {e}", exc_info=True)
-    #     raise
+    try:
+        cluster_labeled_file_path,cluster_file_paths = cluster_prediction_step(clean_data_path)
+    except Exception as e:
+        logging.error(f"[Step: Cluster Prediction] Failed to cluster data: {e}", exc_info=True)
+        raise
 
     # try:
     #     classifier_model_uri=train_classification_model_step(cluster_labeled_file_path)
