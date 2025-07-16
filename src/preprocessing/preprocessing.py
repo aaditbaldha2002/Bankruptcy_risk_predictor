@@ -68,13 +68,17 @@ def preprocess_data(data_path: str) -> str:
         dataset_pca.drop(columns=['Working Capital to Total Assets'], inplace=True, errors='ignore')
 
         # Output saving
-        os.makedirs('output/pca', exist_ok=True)
-        joblib.dump(dropped_cols, 'output/pca/columns_to_drop.pkl')
-        joblib.dump(pca_pairs_df, 'output/pca/pca_pairs_used.pkl')
-        joblib.dump(pca_models, 'output/pca/fitted_pca_models.pkl')
+        ARTIFACTS_DIR = "artifacts/preprocessing"
+        PCA_DIR = os.path.join(ARTIFACTS_DIR, "pca")
+        INTERMEDIATE_DIR = os.path.join(ARTIFACTS_DIR, "intermediate")
 
-        os.makedirs('output/intermediate', exist_ok=True)
-        intermediate_path = 'output/intermediate/dataset_pca.csv'
+        os.makedirs(PCA_DIR, exist_ok=True)
+        joblib.dump(dropped_cols, os.path.join(PCA_DIR, "columns_to_drop.pkl"))
+        joblib.dump(pca_pairs_df, os.path.join(PCA_DIR, "pca_pairs_used.pkl"))
+        joblib.dump(pca_models, os.path.join(PCA_DIR, "fitted_pca_models.pkl"))
+
+        os.makedirs(INTERMEDIATE_DIR, exist_ok=True)
+        intermediate_path = os.path.join(INTERMEDIATE_DIR, "dataset_pca.csv")
         dataset_pca.to_csv(intermediate_path, index=False)
 
         # Gaussian transformation

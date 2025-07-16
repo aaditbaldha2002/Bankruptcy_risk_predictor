@@ -50,7 +50,7 @@ def adaptive_transform(data_path: str) -> str:
             transformed_data[feature] = df[feature].values.flatten()
             transformers[feature] = FunctionTransformer(func=None)
 
-    output_dir = 'output/intermediate'
+    output_dir = 'artifacts/preprocessing/transformed'
     os.makedirs(output_dir, exist_ok=True)
     file_path = os.path.join(output_dir, 'train_ada_transformed.csv')
 
