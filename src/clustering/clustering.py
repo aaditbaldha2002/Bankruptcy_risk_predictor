@@ -19,6 +19,7 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
         raise
 
     try:
+        logger.info("Scaling the dataset...")
         scl = StandardScaler()
         scaled_df = pd.DataFrame(scl.fit_transform(df), columns=df.columns)
         min_max_scaler = MinMaxScaler()
@@ -29,6 +30,7 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
         raise
 
     try:
+        logger.info("Performing KMeans clustering...")
         kmeans = KMeans(n_clusters=5, random_state=2)
         kmeans.fit(final_scaled_df)
         final_scaled_df['Cluster'] = kmeans.labels_
@@ -38,6 +40,7 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
         raise
 
     try:
+        logger.info("Storing the artifacts...")
         cluster_dfs = []
         cluster_file_paths = []
         base_dir = 'artifacts/clustering'
@@ -54,6 +57,8 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
             logger.info(f"Saved cluster {cluster_num} data at {cluster_file_path}")
             cluster_dfs.append(cluster_df)
             cluster_file_paths.append(cluster_file_path)
+        
+        logger.info("Artifacts stored successfully")
     except Exception as e:
         logger.exception(f"Error during saving clustered data files: {e}")
         raise

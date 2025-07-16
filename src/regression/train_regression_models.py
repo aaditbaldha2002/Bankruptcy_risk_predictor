@@ -31,9 +31,15 @@ def train_regression_models(data_paths: List[str]) -> List[str]:
             indexes = df['Index']
             bankrupt_ = df['Bankrupt?']
             df = df.drop(columns=[
-                'Cash/Total Assets', 'Total debt/Total net worth', 'Equity to Long-term Liability',
-                'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
-                'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability'
+                'Cash/Total Assets', 
+                'Total debt/Total net worth', 
+                'Equity to Long-term Liability',
+                'Cash/Current Liability', 
+                'Long-term Liability to Current Assets', 
+                'Quick Ratio',
+                'Working capitcal Turnover Rate', 
+                'Current Ratio', 
+                'Quick Assets/Current Liability'
             ])
 
             logger.info("🔄 Scaling data...")
@@ -49,6 +55,7 @@ def train_regression_models(data_paths: List[str]) -> List[str]:
             X = final_df.values
             y = bankrupt_.values
 
+            logger.info("Splitting dataset ...")
             X_train, X_test, y_train, y_test = train_test_split(
                 X, y, test_size=0.2, random_state=33, stratify=y, shuffle=True
             )

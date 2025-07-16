@@ -63,11 +63,12 @@ def preprocess_data(data_path: str) -> str:
         dataset_pca, pca_features, dropped_cols, pca_pairs_df, pca_models = hybrid_iterative_reduction(
             scaled_dataset, thresh_low=0.8, thresh_high=0.95, verbose=True
         )
-
+        logging.info("PCA reduction completed")
         # Drop additional column (if still exists)
         dataset_pca.drop(columns=['Working Capital to Total Assets'], inplace=True, errors='ignore')
 
         # Output saving
+        logging.info("Storing the artifacts...")
         ARTIFACTS_DIR = "artifacts/preprocessing"
         PCA_DIR = os.path.join(ARTIFACTS_DIR, "pca")
         INTERMEDIATE_DIR = os.path.join(ARTIFACTS_DIR, "intermediate")
@@ -80,7 +81,7 @@ def preprocess_data(data_path: str) -> str:
         os.makedirs(INTERMEDIATE_DIR, exist_ok=True)
         intermediate_path = os.path.join(INTERMEDIATE_DIR, "dataset_pca.csv")
         dataset_pca.to_csv(intermediate_path, index=False)
-
+        logging.info('Artifacts stored successfully.')
         # Gaussian transformation
         logging.info("[Preprocessing] Applying Gaussian transformation.")
         transformed_data_path = adaptive_transform(intermediate_path)
