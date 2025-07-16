@@ -1,12 +1,13 @@
 import logging
 import os
+from typing import List, Tuple
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 logger = logging.getLogger(__name__)
 
-def clustering(data_path: str) -> list:
+def clustering(data_path: str) -> Tuple[str,List[str]]:
     try:
         df = pd.read_csv(data_path)
         logger.info(f"Loaded data from {data_path} with shape {df.shape}")
@@ -57,4 +58,4 @@ def clustering(data_path: str) -> list:
         logger.exception(f"Error during saving clustered data files: {e}")
         raise
 
-    return [final_scaled_df] + cluster_file_paths
+    return clustering_file_path,cluster_file_paths

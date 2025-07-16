@@ -4,7 +4,7 @@ import pandas as pd
 import logging
 from sklearn.preprocessing import StandardScaler
 
-from src.preprocessing import adaptive_transform
+from src.preprocessing.adaptive_transform import adaptive_transform
 from src.preprocessing.pca_feature_reduction import hybrid_iterative_reduction
 
 def preprocess_data(data_path: str) -> str:

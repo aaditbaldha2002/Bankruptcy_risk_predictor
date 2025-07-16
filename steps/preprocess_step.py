@@ -1,7 +1,7 @@
 import logging
 import pandas as pd
 from zenml.steps import step
-from preprocessing.preprocessing import preprocess_data
+from src.preprocessing.preprocessing import preprocess_data
 
 @step(enable_cache=True)
 def preprocess_step(data_path: str) -> str:
