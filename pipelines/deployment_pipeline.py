@@ -30,22 +30,22 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
         logging.error(f"[Step: Cluster Prediction] Failed to cluster data: {e}", exc_info=True)
         raise
 
-    try:
-        classifier_model_uri=train_classification_model_step(cluster_labeled_file_path)
-    except Exception as e:
-        logging.error(f"[Step: Train Classification] Failed to train classification model: {e}", exc_info=True)
-        raise
+    # try:
+    #     classifier_model_uri=train_classification_model_step(cluster_labeled_file_path)
+    # except Exception as e:
+    #     logging.error(f"[Step: Train Classification] Failed to train classification model: {e}", exc_info=True)
+    #     raise
 
-    try:
-        regressor_model_uris=train_regressor_model_step(cluster_file_paths)
-    except Exception as e:
-        logging.error(f"[Step: Train Regression Models] Failed to train regression models: {e}", exc_info=True)
-        raise
+    # try:
+    #     regressor_model_uris=train_regressor_model_step(cluster_file_paths)
+    # except Exception as e:
+    #     logging.error(f"[Step: Train Regression Models] Failed to train regression models: {e}", exc_info=True)
+    #     raise
 
-    try:
-        metrics = evaluation_step(test_data_path,classifier_model_uri,regressor_model_uris)
-    except Exception as e:
-        logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
-        raise
+    # try:
+    #     metrics = evaluation_step(test_data_path,classifier_model_uri,regressor_model_uris)
+    # except Exception as e:
+    #     logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
+    #     raise
 
     # based on the metrics deploy the models
