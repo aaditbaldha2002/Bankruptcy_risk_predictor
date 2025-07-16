@@ -1,0 +1,4 @@
+[core]
+    remote = local_remote
+['remote "local_remote"']
+    url = C:/Users/aadit/Job_Preparation/Project/DVC_store
