@@ -35,7 +35,7 @@ def train_classification_model(data_path:str)->str:
         cv = StratifiedKFold(n_splits=5, shuffle=True, random_state=42)
 
         logger.info("Running grid search for base model...")
-        grid_search = GridSearchCV(classification_model, param_grid, scoring='accuracy', cv=cv, n_jobs=-1, verbose=1)
+        grid_search = GridSearchCV(classification_model, param_grid, scoring='recall', cv=cv, n_jobs=-1, verbose=1)
         grid_search.fit(X_train, y_train)
 
         logger.info("Feature importance analysis...")
@@ -68,7 +68,7 @@ def train_classification_model(data_path:str)->str:
             'colsample_bytree': [0.8, 1.0]
         }
 
-        grid_search_r = GridSearchCV(xgb_reduced, param_grid_r, scoring='accuracy', cv=cv, n_jobs=-1, verbose=1)
+        grid_search_r = GridSearchCV(xgb_reduced, param_grid_r, scoring='recall', cv=cv, n_jobs=-1, verbose=1)
         
         logger.info("Tracking with MLflow...")
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())

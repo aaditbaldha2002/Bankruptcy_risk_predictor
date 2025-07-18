@@ -8,7 +8,8 @@ from zenml.integrations.mlflow.mlflow_utils import get_tracking_uri
 import mlflow
 import mlflow.sklearn
 
-from classification.train_classification_model import train_classification_model
+from src.classification.train_classification_model import train_classification_model
+
 
 logger = logging.getLogger(__name__)
 

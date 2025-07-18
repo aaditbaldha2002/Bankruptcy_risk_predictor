@@ -10,7 +10,7 @@ from sklearn.metrics import (
 from zenml.steps import step
 import mlflow
 
-from evaluation.evaluate_models import evaluate_models
+from src.evaluation.evaluate_models import evaluate_models
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)

@@ -3,8 +3,7 @@ from typing import List
 
 import mlflow
 import pandas as pd
-from sklearn.base import accuracy_score, r2_score
-from sklearn.metrics import f1_score, mean_squared_error, precision_score, recall_score
+from sklearn.metrics import f1_score, mean_squared_error, precision_score, recall_score,accuracy_score, r2_score
 
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
