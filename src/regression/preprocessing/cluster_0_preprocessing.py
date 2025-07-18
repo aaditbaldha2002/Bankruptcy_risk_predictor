@@ -12,10 +12,9 @@ def cluster_0_preprocessing(data_path:str)->str:
     dataset=pd.read_csv(data_path)
 
     sc=StandardScaler()
-    indexes=dataset['Index']
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
-    dataset=dataset.drop(columns=['Index','Bankrupt?','Cash/Total Assets','Total debt/Total net worth','Equity to Long-term Liability','Cash/Current Liability','Long-term Liability to Current Assets','Quick Ratio','Working capitcal Turnover Rate','Current Ratio','Quick Assets/Current Liability'])
+    dataset=dataset.drop(columns=['Bankrupt?','Cash/Total Assets','Total debt/Total net worth','Equity to Long-term Liability','Cash/Current Liability','Long-term Liability to Current Assets','Quick Ratio','Working capitcal Turnover Rate','Current Ratio','Quick Assets/Current Liability'])
 
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
         dataset,

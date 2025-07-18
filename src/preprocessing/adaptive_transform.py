@@ -11,9 +11,8 @@ logger = logging.getLogger(__name__)
 def adaptive_transform(data_path: str) -> str:
     try:
         df = pd.read_csv(data_path)
-        indexes=df['Index']
         bankrupt=df['Bankrupt?']
-        df=df.drop(columns=['Index','Bankrupt?'])
+        df=df.drop(columns=['Bankrupt?'])
 
     except FileNotFoundError as fnf_error:
         logger.error(f"File not found: {data_path} - {fnf_error}")
@@ -60,7 +59,6 @@ def adaptive_transform(data_path: str) -> str:
 
     try:
         transformed_df = pd.DataFrame(transformed_data)
-        transformed_df['Index']=indexes
         transformed_df['Bankrupt?']=bankrupt
         transformed_df.to_csv(file_path, index=False)
         logger.info(f"Transformed data saved to {file_path}")

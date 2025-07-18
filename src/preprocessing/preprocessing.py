@@ -55,7 +55,7 @@ def preprocess_data(data_path: str) -> str:
             'Inventory/Current Liability',
         ]
 
-        scaled_dataset.drop(columns=columns_to_drop, inplace=True, errors='ignore')
+        scaled_dataset.drop(columns=columns_to_drop,axis=1, inplace=True)
         logging.info(f"[Preprocessing] Dropped {len(columns_to_drop)} columns.")
 
         # Apply hybrid PCA
@@ -66,7 +66,6 @@ def preprocess_data(data_path: str) -> str:
         logging.info("PCA reduction completed")
         # Drop additional column (if still exists)
         dataset_pca.drop(columns=['Working Capital to Total Assets'], inplace=True, errors='ignore')
-        dataset_pca['Index']=indexes
         dataset_pca['Bankrupt?']=bankrupt
 
         # Output saving
