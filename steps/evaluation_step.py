@@ -10,6 +10,7 @@ from sklearn.metrics import (
 from zenml.steps import step
 import mlflow
 
+from src.evaluation.evaluate_metrics import evaluate_metrics
 from src.evaluation.evaluate_models import evaluate_models
 
 logger = logging.getLogger(__name__)
@@ -25,6 +26,6 @@ def evaluation_step(
     evaluate_models(data_path,classifier_model_uri,regressor_model_uris)
     logger.info("Evaluation step complemented.")
     logger.info("Evaluating model metrics...")
-    deployment_decision=evaluate_models()
+    deployment_decision=evaluate_metrics()
     logger.info("Evaluating model completed")
     return deployment_decision
