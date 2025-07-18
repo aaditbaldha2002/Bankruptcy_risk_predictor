@@ -12,7 +12,7 @@ from scipy.stats import randint, uniform
 @register_trainer(3)
 def cluster_3_training(data_path:str)->str:
     dataset=pd.read_csv(data_path)
-    X=dataset.drop(columns=['Index','Bankrupt?']).values
+    X=dataset.drop(columns=['Bankrupt?']).values
     y=dataset['Bankrupt?'].values
 
     X_train, X_test, y_train, y_test = train_test_split(

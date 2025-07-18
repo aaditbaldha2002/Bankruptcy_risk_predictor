@@ -11,7 +11,7 @@ from sklearn.base import clone
 @register_trainer(4)
 def cluster_4_training(data_path:str)->str:
     dataset=pd.read_csv(data_path)
-    X = dataset.drop(columns=['Bankrupt?', 'Index'])
+    X = dataset.drop(columns=['Bankrupt?'])
     y = dataset['Bankrupt?'].values  # numpy array for indexing performance
 
     scaler = StandardScaler()

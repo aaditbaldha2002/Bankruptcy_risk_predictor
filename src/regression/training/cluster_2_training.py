@@ -17,7 +17,7 @@ from imblearn.combine import SMOTEENN
 @register_trainer(2)
 def cluster_2_training(data_path:str)->str:
     dataset=pd.read_csv(data_path)
-    X=dataset.drop(columns=['Index','Bankrupt?'],axis=1)
+    X=dataset.drop(columns=['Bankrupt?'],axis=1)
     y=dataset['Bankrupt?']
 
     # Stratified split to preserve class ratio

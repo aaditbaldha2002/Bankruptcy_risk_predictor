@@ -10,7 +10,7 @@ from imblearn.over_sampling import ADASYN
 @register_trainer(1)
 def cluster_1_training(data_path:str)->str:
     dataset=pd.read_csv(data_path)
-    X = dataset.drop(["Bankrupt?", "Index"], axis=1)
+    X = dataset.drop(["Bankrupt?"], axis=1)
     y = dataset["Bankrupt?"]
 
     # --- 2. Train-Test Split (Stratified) ---

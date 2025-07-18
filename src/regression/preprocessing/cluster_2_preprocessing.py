@@ -2,6 +2,7 @@ import logging
 import os
 
 import pandas as pd
+from src.preprocessing.pca_feature_reduction import hybrid_iterative_reduction
 from src.regression.preprocess_cluster_data import register_preprocessor
 from sklearn.preprocessing import StandardScaler
 
@@ -13,7 +14,6 @@ def cluster_2_preprocessing(data_path:str)->str:
     indexes=dataset['Index']
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
-    dataset['Index']=indexes
     dataset['Bankrupt?']=bankrupt_
 
 
@@ -32,6 +32,7 @@ def cluster_2_preprocessing(data_path:str)->str:
                                     'Current Ratio',
                                     'Quick Assets/Current Liability'
                                     ])
+    final_df['Bankrupt?']=bankrupt_
 
     DATA_PATH='artifacts'
     DATA_PATH=os.path.join('cluster_2')

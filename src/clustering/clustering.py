@@ -10,6 +10,9 @@ logger = logging.getLogger(__name__)
 def clustering(data_path: str) -> Tuple[str,List[str]]:
     try:
         df = pd.read_csv(data_path)
+        indexes=df['Index']
+        bankrupt=df['Bankrupt?']
+        df=df.drop(columns=['Index','Bankrupt?'])
         logger.info(f"Loaded data from {data_path} with shape {df.shape}")
     except FileNotFoundError as fnf_err:
         logger.error(f"File not found: {data_path} - {fnf_err}")
@@ -34,6 +37,8 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
         kmeans = KMeans(n_clusters=5, random_state=2)
         kmeans.fit(final_scaled_df)
         final_scaled_df['Cluster'] = kmeans.labels_
+        final_scaled_df['Index']=indexes
+        final_scaled_df['Bankrupt?']=bankrupt
         logger.info("KMeans clustering completed")
     except Exception as e:
         logger.exception(f"Error during KMeans clustering: {e}")

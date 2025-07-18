@@ -30,7 +30,6 @@ def cluster_4_preprocessing(data_path:str)->str:
     joblib.dump(pca_models, f'{ARTIFACTS_STORE_DIR}/fitted_pca_models.pkl')
 
 
-    final_df['Index']=indexes
     final_df['Bankrupt?']=bankrupt_
 
     DATA_PATH='artifacts'

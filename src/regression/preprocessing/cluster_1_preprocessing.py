@@ -12,7 +12,6 @@ def cluster_1_preprocessing(data_path:str)->str:
     indexes=dataset['Index']
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
-    dataset['Index']=indexes
     dataset['Bankrupt?']=bankrupt_
 
     columns_to_drop=[

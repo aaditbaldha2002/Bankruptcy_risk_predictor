@@ -30,7 +30,8 @@ def cluster_3_preprocessing(data_path:str)->str:
         thresh_high=0.95,
         verbose=True
     )
-
+    final_df['Bankrupt?']=bankrupt_
+    
     ARTIFACTS_STORE_DIR='artifacts'
     ARTIFACTS_STORE_DIR=os.path.join('pca')
 

@@ -11,7 +11,7 @@ from src.regression.train_model_for_cluster import register_trainer
 @register_trainer(0)
 def cluster_0_training(data_path:str)->str:
     dataset=pd.read_csv(data_path)
-    X = dataset.values
+    X = dataset.drop(columns=['Bankrupt?']).values
     y = dataset['Bankrupt?'].values
 
     X_train, X_test, y_train, y_test = train_test_split(
