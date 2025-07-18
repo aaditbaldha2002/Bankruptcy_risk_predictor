@@ -22,19 +22,17 @@ def cluster_4_preprocessing(data_path:str)->str:
         verbose=True
     )
 
-    ARTIFACTS_STORE_DIR='artifacts'
-    ARTIFACTS_STORE_DIR=os.path.join('pca')
+    DATA_PATH='artifacts'
+    DATA_PATH=os.path.join('cluster_4')
+    DATA_PATH=os.path.join('preprocessing')
 
-    joblib.dump(dropped_cols, f'{ARTIFACTS_STORE_DIR}/columns_to_drop.pkl')
-    joblib.dump(pca_pairs_df, f'{ARTIFACTS_STORE_DIR}/pca_pairs_used.pkl')
-    joblib.dump(pca_models, f'{ARTIFACTS_STORE_DIR}/fitted_pca_models.pkl')
+    joblib.dump(dropped_cols, f'{DATA_PATH}/columns_to_drop.pkl')
+    joblib.dump(pca_pairs_df, f'{DATA_PATH}/pca_pairs_used.pkl')
+    joblib.dump(pca_models, f'{DATA_PATH}/fitted_pca_models.pkl')
 
 
     final_df['Bankrupt?']=bankrupt_
 
-    DATA_PATH='artifacts'
-    DATA_PATH=os.path.join('cluster_4')
-    DATA_PATH=os.path.join('preprocessing')
 
     final_df.to_csv(DATA_PATH)
     return DATA_PATH

@@ -7,7 +7,7 @@ from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression
 
 @pipeline(enable_cache=True)
-def inference_pipeline(data) -> List[float]:
+def inference_pipeline(data:List[float]) -> List[float]:
     try:
         # Load classification model
         classification_model = XGBClassifier(
