@@ -47,7 +47,7 @@ def cluster_4_training(data_path: str) -> str:
             y_train, y_test = y[train_idx], y[test_idx]
 
             logger.info("Applying SMOTE on fold %d", fold)
-            X_resampled, y_resampled = SMOTE(random_state=42, n_jobs=-1).fit_resample(X_train, y_train)
+            X_resampled, y_resampled = SMOTE(random_state=42).fit_resample(X_train, y_train)
 
             model = clone(base_model)
             model.fit(X_resampled, y_resampled, verbose=False)

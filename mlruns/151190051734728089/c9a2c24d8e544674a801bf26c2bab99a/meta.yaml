@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/aadit/Stevens%20Institute%20of%20Technology/Sem%202/ML%20Fundamentals%20And%20Application/Assignments/Project/ML_Project_Spring_2025/mlruns/151190051734728089/c9a2c24d8e544674a801bf26c2bab99a/artifacts
+end_time: 1752955229804
+entry_point_name: ''
+experiment_id: '151190051734728089'
+lifecycle_stage: active
+run_id: c9a2c24d8e544674a801bf26c2bab99a
+run_name: XGB-SMOTETomek-Cluster3
+run_uuid: c9a2c24d8e544674a801bf26c2bab99a
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752955225516
+status: 3
+tags: []
+user_id: aadit
