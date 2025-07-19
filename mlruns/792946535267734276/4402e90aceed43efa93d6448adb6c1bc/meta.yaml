@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/aadit/Stevens%20Institute%20of%20Technology/Sem%202/ML%20Fundamentals%20And%20Application/Assignments/Project/ML_Project_Spring_2025/mlruns/792946535267734276/4402e90aceed43efa93d6448adb6c1bc/artifacts
+end_time: 1752951606029
+entry_point_name: ''
+experiment_id: '792946535267734276'
+lifecycle_stage: active
+run_id: 4402e90aceed43efa93d6448adb6c1bc
+run_name: XGBRanker-Cluster0
+run_uuid: 4402e90aceed43efa93d6448adb6c1bc
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752951601798
+status: 3
+tags: []
+user_id: aadit

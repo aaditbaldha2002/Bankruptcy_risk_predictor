@@ -9,7 +9,6 @@ from sklearn.preprocessing import StandardScaler
 def cluster_1_preprocessing(data_path:str)->str:
     dataset=pd.read_csv(data_path)
     sc=StandardScaler()
-    indexes=dataset['Index']
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
     dataset['Bankrupt?']=bankrupt_
@@ -21,11 +20,9 @@ def cluster_1_preprocessing(data_path:str)->str:
     'Interest Expense Ratio'
     ]
     dataset=dataset.drop(columns=columns_to_drop)
+    output_dir = os.path.join('artifacts', 'cluster_1', 'preprocessing')
+    os.makedirs(output_dir,exist_ok=True)
 
-    DATA_PATH='artifacts'
-    DATA_PATH=os.path.join('cluster_1')
-    DATA_PATH=os.path.join('preprocessing')
+    dataset.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
 
-    dataset.to_csv(DATA_PATH,index=False)
-
-    return DATA_PATH
+    return os.path.join(output_dir,'processed_data.csv')

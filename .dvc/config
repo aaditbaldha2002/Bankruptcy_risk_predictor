@@ -1,4 +1,6 @@
 [core]
-    remote = local_remote
+    remote = s3remote
 ['remote "local_remote"']
     url = C:/Users/aadit/Job_Preparation/Project/DVC_store
+['remote "s3remote"']
+    url = s3://bankruptcy-risk-bucket/dvc-store

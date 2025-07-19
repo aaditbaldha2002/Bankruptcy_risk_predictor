@@ -11,7 +11,7 @@ def preprocess_data(data_path: str) -> str:
     try:
         logging.info(f"[Preprocessing] Loading dataset from: {data_path}")
         dataset = pd.read_csv(data_path)
-
+        dataset.columns=dataset.columns.str.strip()
         # Separate key columns
         indexes = dataset['Index']
         bankrupt = dataset['Bankrupt?']

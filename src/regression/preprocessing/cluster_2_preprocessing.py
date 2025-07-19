@@ -12,7 +12,6 @@ def cluster_2_preprocessing(data_path:str)->str:
     dataset=pd.read_csv(data_path)
 
     sc=StandardScaler()
-    indexes=dataset['Index']
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
     dataset['Bankrupt?']=bankrupt_
@@ -35,19 +34,17 @@ def cluster_2_preprocessing(data_path:str)->str:
                                     ])
     final_df['Bankrupt?']=bankrupt_
 
-    if all_pca_pairs:
-        pca_pairs_df = pd.concat(all_pca_pairs, ignore_index=True)
+    if not all_pca_pairs.empty:
+        pca_pairs_df = all_pca_pairs
     else:
         pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
 
+    output_dir=os.path.join('artifacts','cluster_2','preprocessing')
+    os.makedirs(output_dir,exist_ok=True)
+    final_df.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
 
-    DATA_PATH='artifacts'
-    DATA_PATH=os.path.join('cluster_2')
-    DATA_PATH=os.path.join('preprocessing')
-    final_df.to_csv(DATA_PATH,index=False)
+    joblib.dump(dropped_cols, f'{output_dir}/columns_to_drop.pkl')
+    joblib.dump(pca_pairs_df, f'{output_dir}/pca_pairs_used.pkl')
+    joblib.dump(pca_models, f'{output_dir}/fitted_pca_models.pkl')
 
-    joblib.dump(dropped_cols, f'{DATA_PATH}/columns_to_drop.pkl')
-    joblib.dump(pca_pairs_df, f'{DATA_PATH}/pca_pairs_used.pkl')
-    joblib.dump(pca_models, f'{DATA_PATH}/fitted_pca_models.pkl')
-
-    return DATA_PATH
+    return os.path.join(output_dir,'processed_data.csv')

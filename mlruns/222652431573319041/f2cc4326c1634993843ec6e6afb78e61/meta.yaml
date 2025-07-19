@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/aadit/Stevens%20Institute%20of%20Technology/Sem%202/ML%20Fundamentals%20And%20Application/Assignments/Project/ML_Project_Spring_2025/mlruns/222652431573319041/f2cc4326c1634993843ec6e6afb78e61/artifacts
+end_time: 1752950907081
+entry_point_name: ''
+experiment_id: '222652431573319041'
+lifecycle_stage: active
+run_id: f2cc4326c1634993843ec6e6afb78e61
+run_name: XGB-Cluster1-Tuned
+run_uuid: f2cc4326c1634993843ec6e6afb78e61
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752950902970
+status: 3
+tags: []
+user_id: aadit

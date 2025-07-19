@@ -128,8 +128,13 @@ def hybrid_iterative_reduction(df, thresh_low=0.8, thresh_high=0.95, verbose=Fal
                 all_pca_cols.extend(new_pca_cols)
 
             iteration += 1
+        
+        if all_pca_pairs:
+            all_pca_pairs_df = pd.concat(all_pca_pairs, ignore_index=True)
+        else:
+            all_pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
 
-        return df_iter.reset_index(drop=True), all_pca_cols, drop_track, pd.concat(all_pca_pairs, ignore_index=True), pca_model_dict
+        return df_iter.reset_index(drop=True), all_pca_cols, drop_track, all_pca_pairs_df, pca_model_dict
 
     except Exception as e:
         logger.exception("Unexpected error in hybrid iterative PCA reduction.")
