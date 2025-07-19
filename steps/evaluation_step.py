@@ -23,9 +23,8 @@ def evaluation_step(
     regressor_model_uris: List[str]
 ) -> bool:
     logger.info("Starting the evaluation step...")
-    evaluate_models(data_path,classifier_model_uri,regressor_model_uris)
     logger.info("Evaluation step complemented.")
     logger.info("Evaluating model metrics...")
-    deployment_decision=evaluate_metrics()
+    deployment_decision=evaluate_models(data_path,classifier_model_uri,regressor_model_uris)
     logger.info("Evaluating model completed")
     return deployment_decision
