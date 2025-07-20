@@ -75,7 +75,7 @@ def cluster_4_training(data_path: str) -> str:
             # Log metrics
             mlflow.log_metric("best_threshold", best_thresh)
             mlflow.log_metric("f2_score", f2)
-            mlflow.log_metric("average_precision", avg_prec)
+            mlflow.log_metric("average_precision_score", avg_prec)
 
             # Log base model (trained once for artifact purposes)
             logger.info("Logging representative model to MLflow")

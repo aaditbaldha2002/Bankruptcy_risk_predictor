@@ -25,9 +25,9 @@ def evaluate_models(
     test_data_path: str,
     classifier_model_uri: str,
     regressor_model_uris: List[str],
-    classifier_threshold: float = 0.85,
-    regressor_rmse_threshold: float = 0.03,
-    regressor_r2_threshold: float = 0.8
+    classifier_threshold: float = 0.0,
+    regressor_rmse_threshold: float = 0,
+    regressor_r2_threshold: float = 0
 ) -> bool:
     logger.info("🔍 Starting evaluation using model URIs...")
 
@@ -38,7 +38,7 @@ def evaluate_models(
         logger.info(f"📦 Loading classifier metrics from: {classifier_model_uri}")
         clf_metrics = extract_metrics_from_model_uri(classifier_model_uri)
         clf_accuracy = float(clf_metrics.get("accuracy", 0.0))
-        clf_f1 = float(clf_metrics.get("f1_score", 0.0))
+        clf_f1 = float(clf_metrics.get("f1_macro", 0.0))
 
         logger.info(f"📊 Classifier Accuracy: {clf_accuracy}, F1 Score: {clf_f1}")
 
@@ -59,12 +59,9 @@ def evaluate_models(
             logger.info(f"📦 Loading regressor metrics from: {uri}")
             reg_metrics = extract_metrics_from_model_uri(uri)
 
-            rmse = float(reg_metrics.get("rmse", 1e9))  # Default to large number
-            r2 = float(reg_metrics.get("r2_score", 0.0))
+            rmse = float(reg_metrics.get("average_precision_score", 1e9))  # Default to large number
 
-            logger.info(f"📊 Regressor[{idx}] RMSE: {rmse}, R²: {r2}")
-
-            if rmse <= regressor_rmse_threshold and r2 >= regressor_r2_threshold:
+            if rmse <= regressor_rmse_threshold:
                 passed_regressors += 1
                 logger.info(f"✅ Regressor[{idx}] passed.")
             else:

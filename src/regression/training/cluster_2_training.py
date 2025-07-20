@@ -8,11 +8,11 @@ from sklearn.inspection import permutation_importance
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import RandomizedSearchCV, StratifiedKFold, train_test_split
 from sklearn.neural_network import MLPClassifier
-from xgboost import XGBClassifier
+from xgboost import XGBClassifier, XGBRanker
 from sklearn.preprocessing import StandardScaler
 from imblearn.pipeline import Pipeline as ImbPipeline
 from imblearn.combine import SMOTEENN
-from sklearn.metrics import recall_score, precision_score
+from sklearn.metrics import recall_score, precision_score, average_precision_score
 
 from src.regression.train_model_for_cluster import register_trainer
 
@@ -126,7 +126,27 @@ def cluster_2_training(data_path: str) -> str:
         precision_topk = precision_score(X_test_df_sorted['true_label'], X_test_df_sorted['predicted'])
         recall_topk = recall_score(X_test_df_sorted['true_label'], X_test_df_sorted['predicted'])
 
-        logger.info("Precision@Top20%%: %.4f | Recall@Top20%%: %.4f", precision_topk, recall_topk)
+        logger.info("Training XGBRanker model for average_precision_score metric...")
+
+        # For XGBRanker, we need group info; here, as a proxy, assume one big group (or adapt as needed)
+        group_train = [len(y_train)]  # single group
+        group_test = [len(y_test)]    # single group
+
+        xgbranker = XGBRanker(
+            objective='rank:pairwise',
+            random_state=42,
+            eval_metric='map',
+            scale_pos_weight=(y_train == 0).sum() / (y_train == 1).sum() * 1.5,
+            n_estimators=100,
+            max_depth=5,
+            learning_rate=0.1
+        )
+        xgbranker.fit(X_train, y_train, group=group_train)
+
+        # Predict scores on test set
+        y_scores_ranker = xgbranker.predict(X_test)
+        aps_ranker = average_precision_score(y_test, y_scores_ranker)
+        logger.info("XGBRanker average_precision_score: %.4f", aps_ranker)
 
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
         mlflow.set_experiment("cluster-2-stacked-bankruptcy-prediction")
@@ -136,6 +156,7 @@ def cluster_2_training(data_path: str) -> str:
             mlflow.log_params(search.best_params_)
             mlflow.log_metric("precision_topk", precision_topk)
             mlflow.log_metric("recall_topk", recall_topk)
+            mlflow.log_metric("average_precision_score", aps_ranker)
 
             mlflow.sklearn.log_model(best_model, "stacked_model_cluster2")
             model_uri = f"runs:/{run_id}/stacked_model_cluster2"

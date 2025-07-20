@@ -90,7 +90,7 @@ def cluster_3_training(data_path: str) -> str:
             run_id = run.info.run_id
             mlflow.log_params(search.best_params_)
             mlflow.log_metrics({
-                "average_precision": avg_precision,
+                "average_precision_score": avg_precision,
                 "f2_score": best_f2,
                 "best_threshold": best_threshold
             })
