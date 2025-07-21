@@ -5,74 +5,67 @@ from mlflow.tracking import MlflowClient
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-
 def extract_metrics_from_model_uri(model_uri: str) -> dict:
-    """
-    Extracts metrics from an MLflow run using the model URI.
-    Args:
-        model_uri (str): e.g., runs:/<run_id>/model_artifact_path
-
-    Returns:
-        dict: Metrics dictionary
-    """
     run_id = model_uri.split("/")[1]
     client = MlflowClient()
     run_data = client.get_run(run_id).data
     return run_data.metrics
 
-
 def evaluate_models(
     test_data_path: str,
     classifier_model_uri: str,
     regressor_model_uris: List[str],
-    classifier_threshold: float = 0.0,
-    regressor_rmse_threshold: float = 0,
-    regressor_r2_threshold: float = 0
+    classifier_threshold: float = 0.85,
+    average_precision_score_threshold: float = 0.0,
 ) -> bool:
     logger.info("🔍 Starting evaluation using model URIs...")
 
     # -----------------------
-    # Evaluate Classification
+    # Evaluate Classifier
     # -----------------------
     try:
         logger.info(f"📦 Loading classifier metrics from: {classifier_model_uri}")
         clf_metrics = extract_metrics_from_model_uri(classifier_model_uri)
-        clf_accuracy = float(clf_metrics.get("accuracy", 0.0))
-        clf_f1 = float(clf_metrics.get("f1_macro", 0.0))
+
+        clf_accuracy = float(clf_metrics.get("accuracy", -1))
+        clf_f1 = float(clf_metrics.get("f1_macro", -1))
 
         logger.info(f"📊 Classifier Accuracy: {clf_accuracy}, F1 Score: {clf_f1}")
 
         if clf_accuracy < classifier_threshold:
-            logger.warning("❌ Classifier failed threshold.")
+            logger.error("❌ Classifier accuracy below threshold.")
             return False
-        logger.info("✅ Classifier passed.")
-    except Exception as e:
+        logger.info("✅ Classifier passed accuracy threshold.")
+    except Exception:
         logger.exception("❌ Failed to evaluate classifier.")
         return False
 
     # ---------------------
     # Evaluate Regressors
     # ---------------------
-    passed_regressors = 0
+    all_passed = True
     for idx, uri in enumerate(regressor_model_uris):
         try:
-            logger.info(f"📦 Loading regressor metrics from: {uri}")
+            logger.info(f"📦 Loading regressor[{idx}] metrics from: {uri}")
             reg_metrics = extract_metrics_from_model_uri(uri)
 
-            rmse = float(reg_metrics.get("average_precision_score", 1e9))  # Default to large number
+            # Ensure correct key is used (replace below if you’re logging actual RMSE as a different name)
+            avg_precision_score = float(reg_metrics.get("average_precision_score", 0.5))
 
-            if rmse <= regressor_rmse_threshold:
-                passed_regressors += 1
-                logger.info(f"✅ Regressor[{idx}] passed.")
+            logger.info(f"📊 Regressor[{idx}] Average Precision Score: {avg_precision_score}")
+
+            if avg_precision_score < average_precision_score_threshold:
+                logger.error(f"❌ Regressor[{idx}] failed RMSE threshold.")
+                all_passed = False
             else:
-                logger.warning(f"❌ Regressor[{idx}] failed.")
-        except Exception as e:
+                logger.info(f"✅ Regressor[{idx}] passed.")
+        except Exception:
             logger.exception(f"❌ Failed to evaluate Regressor[{idx}].")
-            continue
+            return False  # Hard fail if any regressor eval fails
 
-    if passed_regressors == len(regressor_model_uris):
-        logger.info("🚀 All regressors passed. Deployment approved.")
+    if all_passed:
+        logger.info("🚀 All models passed thresholds. Deployment approved.")
         return True
     else:
-        logger.warning(f"⛔ Only {passed_regressors}/{len(regressor_model_uris)} regressors passed.")
+        logger.warning("⛔ One or more regressors failed. Deployment blocked.")
         return False

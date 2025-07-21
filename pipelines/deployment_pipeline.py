@@ -4,6 +4,7 @@ import pandas as pd
 from zenml.pipelines import pipeline
 
 from steps.cluster_prediction_step import cluster_prediction_step
+from steps.deployment_step import deployment_step
 from steps.evaluation_step import evaluation_step
 from steps.preprocess_step import preprocess_step
 from steps.train_classification_model_step import train_classification_model_step
@@ -50,22 +51,9 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
     except Exception as e:
         logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
         raise
-
-    # based on the metrics deploy the models
-    if deployment_decision==True:
-        try:
-            logging.info("Deployment condition met. Serving model...")
-
-            model_uri = "models:/BankruptcyModel/Production"
-            subprocess.Popen(
-                ['mlflow', 'models', 'serve', '-m', model_uri, '-p', '5001'],
-                creationflags=subprocess.CREATE_NEW_CONSOLE
-            )
-
-            logging.info(f"Model is being served at http://127.0.0.1:5001 using MLflow.")
-        except Exception as e:
-            logging.error(f"Deployment failed: {e}", exc_info=True)
-    else:
-        logging.error("The models did'nt get deployed for not reaching the threshold metrics")
+    try:    
+        deployment_step(model_uri=classifier_model_uri, deploy=deployment_decision)
+    except Exception as e:
+        logging.error(f"[Step: Deployment] Failed to deploy models:{e}", exc_info=True)
 
 

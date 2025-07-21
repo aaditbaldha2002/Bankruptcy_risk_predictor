@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/aadit/Stevens%20Institute%20of%20Technology/Sem%202/ML%20Fundamentals%20And%20Application/Assignments/Project/ML_Project_Spring_2025/mlruns/897414789173398123/a3172bdfe1e64ddbb00f45addde8e5d2/artifacts
+end_time: 1753050509613
+entry_point_name: ''
+experiment_id: '897414789173398123'
+lifecycle_stage: active
+run_id: a3172bdfe1e64ddbb00f45addde8e5d2
+run_name: Stacked-Ensemble-Cluster2
+run_uuid: a3172bdfe1e64ddbb00f45addde8e5d2
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1753050505394
+status: 3
+tags: []
+user_id: aadit
