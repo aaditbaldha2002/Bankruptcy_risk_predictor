@@ -58,7 +58,7 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
         logging.info(f"[Step: Deployment] Classifier URI: {classifier_model_uri}")
         logging.info(f"[Step: Deployment] Deployment decision: {deployment_decision}")
         logging.info(f"Registering models...")
-        artifact_classifier_model_uri,artifact_regressor_model_uris=register_models_step(classifier_model_uri=classifier_model_uri,regressor_model_uris=regressor_model_uris)
+        artifact_classifier_model_uri,artifact_regressor_model_uris=register_models_step(classifier_model_uri=classifier_model_uri,regressor_model_uris=regressor_model_uris,deployment_decision=deployment_decision)
         logging.info("Model registration completed")
         logging.info("Pushing models to s3 bucket...")
         dvc_track_models_step(artifact_classifier_model_uri,artifact_regressor_model_uris)
