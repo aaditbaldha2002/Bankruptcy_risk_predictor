@@ -1,0 +1,6 @@
+outs:
+- md5: 56544a60d3ce625a4cce4e25796d0b53.dir
+  size: 464188
+  nfiles: 5
+  hash: md5
+  path: cluster_3_regressor
