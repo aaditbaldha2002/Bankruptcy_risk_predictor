@@ -2,3 +2,4 @@ output/
 artifacts/
 /artifacts
 mlruns/
+/test.txt
