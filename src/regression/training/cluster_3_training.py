@@ -84,9 +84,9 @@ def cluster_3_training(data_path: str) -> str:
 
         logger.info("Logging to MLflow...")
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
-        mlflow.set_experiment("cluster-3-xgboost-bankruptcy")
+        mlflow.set_experiment("cluster-3-regression-model-training")
 
-        with mlflow.start_run(run_name="XGB-SMOTETomek-Cluster3") as run:
+        with mlflow.start_run(run_name="cluster-3-regression-model-run") as run:
             run_id = run.info.run_id
             mlflow.log_params(search.best_params_)
             mlflow.log_metrics({
@@ -94,8 +94,8 @@ def cluster_3_training(data_path: str) -> str:
                 "f2_score": best_f2,
                 "best_threshold": best_threshold
             })
-            mlflow.sklearn.log_model(best_model, "xgb_model_cluster3")
-            model_uri = f"runs:/{run_id}/xgb_model_cluster3"
+            mlflow.sklearn.log_model(best_model, "cluster-3-regression-model")
+            model_uri = f"runs:/{run_id}/cluster-3-regression-model"
             logger.info("Model saved at URI: %s", model_uri)
             return model_uri
 

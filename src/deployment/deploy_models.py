@@ -13,16 +13,11 @@ def deploy_models(deploy:bool,model_uri:str)->None:
         logging.info("🚀 Deployment condition met. Starting MLflow model server...")
 
         process = subprocess.Popen(
-            ['mlflow', 'models', 'serve', '-m', model_uri, '-p', '5001'],
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            universal_newlines=True
+            ['mlflow', 'models', 'serve', '-m', model_uri, '--no-conda', '-p', '5001'],
+            stdout=subprocess.DEVNULL,  # or a log file
+            stderr=subprocess.DEVNULL
         )
-
-        stdout, stderr = process.communicate(timeout=15)
-        logging.info(f"[MLflow Serve STDOUT]:\n{stdout}")
-        logging.error(f"[MLflow Serve STDERR]:\n{stderr}")
-
+        logging.info("✅ MLflow server launched in the background.")
         return "http://127.0.0.1:5001"
     except Exception as e:
         logging.exception("❌ Deployment failed.")

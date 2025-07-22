@@ -51,9 +51,12 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
     except Exception as e:
         logging.error(f"[Step: Evaluation] Failed to evaluate models: {e}", exc_info=True)
         raise
+    
     try:    
+        logging.info(f"[Step: Deployment] Classifier URI: {classifier_model_uri}")
+        logging.info(f"[Step: Deployment] Deployment decision: {deployment_decision}")
         deployment_step(model_uri=classifier_model_uri, deploy=deployment_decision)
     except Exception as e:
-        logging.error(f"[Step: Deployment] Failed to deploy models:{e}", exc_info=True)
-
+        logging.error(f"[Step: Deployment] Failed to deploy models: {e}", exc_info=True)
+        raise
 

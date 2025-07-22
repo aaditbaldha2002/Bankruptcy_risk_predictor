@@ -68,9 +68,9 @@ def cluster_1_training(data_path: str) -> str:
 
         logger.info("Starting MLflow tracking...")
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
-        mlflow.set_experiment("cluster-1-bankruptcy-prediction")
+        mlflow.set_experiment("cluster-1-regression-model-training")
 
-        with mlflow.start_run(run_name="XGB-Cluster1-Tuned") as run:
+        with mlflow.start_run(run_name="cluster-1-regression-model-run") as run:
             run_id = run.info.run_id
 
             # Log parameters
@@ -91,8 +91,8 @@ def cluster_1_training(data_path: str) -> str:
             mlflow.log_metric("optimal_threshold", optimal_threshold)
 
             logger.info("Logging model to MLflow...")
-            mlflow.sklearn.log_model(best_model, "xgb_classifier_cluster1")
-            model_uri = f"runs:/{run_id}/xgb_classifier_cluster1"
+            mlflow.sklearn.log_model(best_model, "cluster_1_regression_model")
+            model_uri = f"runs:/{run_id}/cluster_1_regression_model"
             logger.info("Model saved at: %s", model_uri)
 
             return model_uri

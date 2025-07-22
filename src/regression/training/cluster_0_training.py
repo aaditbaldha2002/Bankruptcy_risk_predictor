@@ -84,9 +84,9 @@ def cluster_0_training(data_path: str) -> str:
 
         # 🚀 MLflow Tracking
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
-        mlflow.set_experiment("ranking-model-cluster-0")
+        mlflow.set_experiment("cluster-0-regression-model-training")
 
-        with mlflow.start_run(run_name="XGBRanker-Cluster0") as run:
+        with mlflow.start_run(run_name="cluster-0-regression-model-run") as run:
             run_id = run.info.run_id
 
             mlflow.set_tags({
@@ -104,9 +104,9 @@ def cluster_0_training(data_path: str) -> str:
             mlflow.log_metric("average_precision_score", final_score)
 
             logger.info("Logging model artifact to MLflow...")
-            mlflow.sklearn.log_model(best_model, artifact_path="xgb_ranker_cluster0")
+            mlflow.sklearn.log_model(best_model, artifact_path="cluster_0_regression_model")
 
-            model_uri = f"runs:/{run_id}/xgb_ranker_cluster0"
+            model_uri = f"runs:/{run_id}/cluster_0_regression_model"
             logger.info("Model logged successfully at: %s", model_uri)
 
             return model_uri

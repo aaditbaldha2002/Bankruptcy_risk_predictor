@@ -70,13 +70,13 @@ def train_classification_model(data_path: str) -> str:
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
         mlflow.set_experiment("classification-model-training")
 
-        with mlflow.start_run(run_name="XGB-Classification-Tuned") as run:
+        with mlflow.start_run(run_name="classification-model-training-run") as run:
             run_id = run.info.run_id
             mlflow.set_tags({
                 "stage": "classification",
                 "model_type": "XGBoost",
                 "input_features": len(top_features),
-                "developer": "aadit.baldha"
+                "developer": "Aadit.Harshal.Baldha"
             })
 
             logger.info("Training reduced XGBoost model...")
@@ -101,9 +101,9 @@ def train_classification_model(data_path: str) -> str:
             })
 
             logger.info("Logging final model to MLflow...")
-            mlflow.sklearn.log_model(reduced_search.best_estimator_, artifact_path="xgb_classifier_model")
+            mlflow.sklearn.log_model(reduced_search.best_estimator_, artifact_path="cluster_classification_model")
 
-            model_uri = f"runs:/{run_id}/xgb_classifier_model"
+            model_uri = f"runs:/{run_id}/cluster_classification_model"
             logger.info("Model logged at URI: %s", model_uri)
             return model_uri
 

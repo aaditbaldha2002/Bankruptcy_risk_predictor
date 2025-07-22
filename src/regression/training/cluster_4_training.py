@@ -67,9 +67,9 @@ def cluster_4_training(data_path: str) -> str:
 
         logger.info("Logging to MLflow...")
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
-        mlflow.set_experiment("cluster-4-xgboost-kfold")
+        mlflow.set_experiment("cluster-4-regression-model-training")
 
-        with mlflow.start_run(run_name="XGB-CV-SMOTE-Cluster4") as run:
+        with mlflow.start_run(run_name="cluster-4-regression-model-run") as run:
             run_id = run.info.run_id
 
             # Log metrics
@@ -81,9 +81,9 @@ def cluster_4_training(data_path: str) -> str:
             logger.info("Logging representative model to MLflow")
             final_model = clone(base_model)
             final_model.fit(X_scaled, y, verbose=False)
-            mlflow.sklearn.log_model(final_model, "xgb_cluster4_model")
+            mlflow.sklearn.log_model(final_model, "cluster_4_regression_model")
 
-            model_uri = f"runs:/{run_id}/xgb_cluster4_model"
+            model_uri = f"runs:/{run_id}/cluster_4_regression_model"
             logger.info("Model URI: %s", model_uri)
             return model_uri
 

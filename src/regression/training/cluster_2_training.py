@@ -149,17 +149,17 @@ def cluster_2_training(data_path: str) -> str:
         logger.info("XGBRanker average_precision_score: %.4f", aps_ranker)
 
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
-        mlflow.set_experiment("cluster-2-stacked-bankruptcy-prediction")
+        mlflow.set_experiment("cluster-2-regression-model-training")
 
-        with mlflow.start_run(run_name="Stacked-Ensemble-Cluster2") as run:
+        with mlflow.start_run(run_name="cluster-2-regression-model-run") as run:
             run_id = run.info.run_id
             mlflow.log_params(search.best_params_)
             mlflow.log_metric("precision_topk", precision_topk)
             mlflow.log_metric("recall_topk", recall_topk)
             mlflow.log_metric("average_precision_score", aps_ranker)
 
-            mlflow.sklearn.log_model(best_model, "stacked_model_cluster2")
-            model_uri = f"runs:/{run_id}/stacked_model_cluster2"
+            mlflow.sklearn.log_model(best_model, "cluster_2_regression_model")
+            model_uri = f"runs:/{run_id}/cluster_2_regression_model"
             logger.info("Model saved at: %s", model_uri)
 
             return model_uri
