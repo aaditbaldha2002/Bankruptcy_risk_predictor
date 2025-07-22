@@ -5,8 +5,10 @@ from zenml.pipelines import pipeline
 
 from steps.cluster_prediction_step import cluster_prediction_step
 from steps.deployment_step import deployment_step
+from steps.dvc_track_models_step import dvc_track_models_step
 from steps.evaluation_step import evaluation_step
 from steps.preprocess_step import preprocess_step
+from steps.register_models_step import register_models_step
 from steps.train_classification_model_step import train_classification_model_step
 from steps.train_regressor_models_step import train_regressor_model_step
 
@@ -55,7 +57,12 @@ def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
     try:    
         logging.info(f"[Step: Deployment] Classifier URI: {classifier_model_uri}")
         logging.info(f"[Step: Deployment] Deployment decision: {deployment_decision}")
-        deployment_step(model_uri=classifier_model_uri, deploy=deployment_decision)
+        logging.info(f"Registering models...")
+        artifact_classifier_model_uri,artifact_regressor_model_uris=register_models_step(classifier_model_uri=classifier_model_uri,regressor_model_uris=regressor_model_uris)
+        logging.info("Model registration completed")
+        logging.info("Pushing models to s3 bucket...")
+        dvc_track_models_step(artifact_classifier_model_uri,artifact_regressor_model_uris)
+        logging.info("Models pushed to the S3 bucket successfully")
     except Exception as e:
         logging.error(f"[Step: Deployment] Failed to deploy models: {e}", exc_info=True)
         raise
