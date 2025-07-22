@@ -1,6 +1,0 @@
-outs:
-- md5: 95fdcc3c50c2b577df3a194f3ca3b7d8.dir
-  size: 3175742
-  nfiles: 30
-  hash: md5
-  path: latest_models
