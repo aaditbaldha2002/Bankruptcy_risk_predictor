@@ -94,7 +94,7 @@ def cluster_3_training(data_path: str) -> str:
                 "f2_score": best_f2,
                 "best_threshold": best_threshold
             })
-            mlflow.sklearn.log_model(best_model, "cluster-3-regression-model")
+            mlflow.sklearn.log_model(best_model, "cluster_3_regression_model")
             model_uri = f"runs:/{run_id}/cluster-3-regression-model"
             logger.info("Model saved at URI: %s", model_uri)
             return model_uri

@@ -4,3 +4,6 @@
     url = C:/Users/aadit/Job_Preparation/Project/DVC_store
 ['remote "s3remote"']
     url = s3://bankruptcy-risk-bucket/dvc-store
+    access_key_id = AKIA4GW547IP233MIGTY
+    secret_access_key = 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
+    profile = default
