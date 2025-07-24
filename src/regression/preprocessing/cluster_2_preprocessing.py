@@ -17,6 +17,7 @@ def cluster_2_preprocessing(data_path:str)->str:
     sc=StandardScaler()
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
+    joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
 
     dataset['Bankrupt?']=bankrupt_
 

@@ -7,11 +7,16 @@ from xgboost import XGBClassifier
 from sklearn.linear_model import LinearRegression
 import pandas as pd
 
-@pipeline(enable_cache=True)
-def inference_pipeline(data:List[float]) -> List[float]:
-    df_train = pd.read_csv('../data/raw/train_data.csv')
-    df_train_columns=df_train.columns.to_list()
-    df = pd.DataFrame([data], columns=[f'{col_name}' for col_name in df_train_columns])
-    
+from steps.cluster_predict_data_step import cluster_predict_data_step
+from steps.inference_preprocess_data_step import inference_preprocess_data_step
 
-    pass
+@pipeline(enable_cache=True)
+def inference_pipeline(data:List[float]) -> int:
+    logging.info("Starting the inference pipeline...")
+    logging.info("Starting preprocessing of the input data...")
+    transformed_data_file_path=inference_preprocess_data_step(data)
+    logging.info("Preprocessing of input data completed")
+    logging.info("Performing cluster prediction on the transformed data ...")
+    cluster_label=cluster_predict_data_step(transformed_data_file_path)
+
+    return -1

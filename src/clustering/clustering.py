@@ -10,6 +10,7 @@ logger = logging.getLogger(__name__)
 
 def clustering(data_path: str) -> Tuple[str,List[str]]:
     base_dir = 'artifacts/clustering'
+    os.makedirs(base_dir,exist_ok=True)
     try:
         df = pd.read_csv(data_path)
         bankrupt=df['Bankrupt?']
