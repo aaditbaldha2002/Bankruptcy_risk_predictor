@@ -20,7 +20,13 @@ def cluster_2_preprocessing(data_path:str)->str:
 
     dataset['Bankrupt?']=bankrupt_
 
-
+    columns_to_drop=['Total debt/Total net worth',
+                                    'Cash/Current Liability',
+                                    'Long-term Liability to Current Assets',
+                                    'Quick Ratio',
+                                    'Current Ratio',
+                                    'Quick Assets/Current Liability'
+                                    ]
 
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
         dataset,
@@ -29,13 +35,8 @@ def cluster_2_preprocessing(data_path:str)->str:
         verbose=True
     )
 
-    final_df=final_df.drop(columns=['Total debt/Total net worth',
-                                    'Cash/Current Liability',
-                                    'Long-term Liability to Current Assets',
-                                    'Quick Ratio',
-                                    'Current Ratio',
-                                    'Quick Assets/Current Liability'
-                                    ])
+    final_df=final_df.drop(columns=columns_to_drop)
+    joblib.dump(columns_to_drop,f'{output_dir}/columns_to_drop.pkl')
     final_df['Bankrupt?']=bankrupt_
 
     if not all_pca_pairs.empty:
@@ -44,9 +45,10 @@ def cluster_2_preprocessing(data_path:str)->str:
         pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
 
     final_df.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
-
-    joblib.dump(dropped_cols, f'{output_dir}/columns_to_drop.pkl')
-    joblib.dump(pca_pairs_df, f'{output_dir}/pca_pairs_used.pkl')
-    joblib.dump(pca_models, f'{output_dir}/fitted_pca_models.pkl')
+    pca_dir=os.path.join(output_dir,'pca')
+    os.makedirs(pca_dir,exist_ok=True)
+    joblib.dump(dropped_cols, f'{pca_dir}/columns_to_drop.pkl')
+    joblib.dump(pca_pairs_df, f'{pca_dir}/pca_pairs_used.pkl')
+    joblib.dump(pca_models, f'{pca_dir}/fitted_pca_models.pkl')
 
     return os.path.join(output_dir,'processed_data.csv')

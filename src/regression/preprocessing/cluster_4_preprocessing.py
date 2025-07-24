@@ -32,6 +32,8 @@ def cluster_4_preprocessing(data_path:str)->str:
         pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
 
     pca_dir=os.path.join(output_dir,'pca')
+    os.makedirs(pca_dir,exist_ok=True)
+    
     joblib.dump(dropped_cols, f'{pca_dir}/columns_to_drop.pkl')
     joblib.dump(pca_pairs_df, f'{pca_dir}/pca_pairs_used.pkl')
     joblib.dump(pca_models, f'{pca_dir}/fitted_pca_models.pkl')

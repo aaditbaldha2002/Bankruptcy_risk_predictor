@@ -22,7 +22,7 @@ def preprocess_data(data_path: str) -> str:
         logging.info("[Preprocessing] Applying StandardScaler.")
         scaler = StandardScaler()
         scaled_array = scaler.fit_transform(dataset)
-        joblib.dump(scaler,'artifacts/preprocessing/first_scaler.pkl')
+        joblib.dump(scaler,os.path.join(ARTIFACTS_DIR, "first_scaler.pkl"))
         scaled_dataset = pd.DataFrame(scaled_array, columns=dataset.columns)
 
         # Drop low-importance or redundant features
@@ -57,7 +57,7 @@ def preprocess_data(data_path: str) -> str:
             'Inventory/Current Liability',
         ]
 
-        joblib.dump(columns_to_drop, os.path.join('artifacts/preprocessing', "columns_to_drop_before_pca.pkl"))
+        joblib.dump(columns_to_drop, os.path.join(ARTIFACTS_DIR, "columns_to_drop_before_pca.pkl"))
         scaled_dataset.drop(columns=columns_to_drop,axis=1, inplace=True)
         logging.info(f"[Preprocessing] Dropped {len(columns_to_drop)} columns.")
 

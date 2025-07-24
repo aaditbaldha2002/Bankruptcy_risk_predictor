@@ -39,7 +39,9 @@ def cluster_0_preprocessing(data_path: str) -> str:
             'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
             'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability'
         ]
-        joblib.dump(cols_to_drop,f'{output_dir}/pca/cols_to_drop_before_pca.pkl')
+        pca_dir=os.path.join(output_dir,'pca')
+        os.makedirs(pca_dir,exist_ok=True)
+        joblib.dump(cols_to_drop,f'{output_dir}/cols_to_drop_before_pca.pkl')
         dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
 
         # Dimensionality reduction
@@ -66,9 +68,9 @@ def cluster_0_preprocessing(data_path: str) -> str:
                 os.chmod(file_path, stat.S_IWRITE)  # Make file writable
 
         # Persist artifacts
-        joblib.dump(dropped_cols, os.path.join(output_dir, 'columns_to_drop.pkl'))
-        joblib.dump(pca_pairs_df, os.path.join(output_dir, 'pca_pairs_used.pkl'))
-        joblib.dump(pca_models, os.path.join(output_dir, 'fitted_pca_models.pkl'))
+        joblib.dump(dropped_cols, os.path.join(pca_dir, 'columns_to_drop.pkl'))
+        joblib.dump(pca_pairs_df, os.path.join(pca_dir, 'pca_pairs_used.pkl'))
+        joblib.dump(pca_models, os.path.join(pca_dir, 'fitted_pca_models.pkl'))
 
         # Append target back
         final_df[target_col] = bankrupt_
