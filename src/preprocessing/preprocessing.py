@@ -16,11 +16,13 @@ def preprocess_data(data_path: str) -> str:
         indexes = dataset['Index']
         bankrupt = dataset['Bankrupt?']
         dataset = dataset.drop(columns=['Index', 'Bankrupt?'])
+        ARTIFACTS_DIR = "artifacts/preprocessing"
 
         # Scaling
         logging.info("[Preprocessing] Applying StandardScaler.")
         scaler = StandardScaler()
         scaled_array = scaler.fit_transform(dataset)
+        joblib.dump(scaler,'artifacts/preprocessing/first_scaler.pkl')
         scaled_dataset = pd.DataFrame(scaled_array, columns=dataset.columns)
 
         # Drop low-importance or redundant features
@@ -55,6 +57,7 @@ def preprocess_data(data_path: str) -> str:
             'Inventory/Current Liability',
         ]
 
+        joblib.dump(columns_to_drop, os.path.join('artifacts/preprocessing', "columns_to_drop_before_pca.pkl"))
         scaled_dataset.drop(columns=columns_to_drop,axis=1, inplace=True)
         logging.info(f"[Preprocessing] Dropped {len(columns_to_drop)} columns.")
 
@@ -70,11 +73,11 @@ def preprocess_data(data_path: str) -> str:
 
         # Output saving
         logging.info("Storing the artifacts...")
-        ARTIFACTS_DIR = "artifacts/preprocessing"
         PCA_DIR = os.path.join(ARTIFACTS_DIR, "pca")
         INTERMEDIATE_DIR = os.path.join(ARTIFACTS_DIR, "intermediate")
 
         os.makedirs(PCA_DIR, exist_ok=True)
+        joblib.dump(['Working Capital to Total Assets'],os.path.join(PCA_DIR,"columns_to_drop_after_pca.pkl"))
         joblib.dump(dropped_cols, os.path.join(PCA_DIR, "columns_to_drop.pkl"))
         joblib.dump(pca_pairs_df, os.path.join(PCA_DIR, "pca_pairs_used.pkl"))
         joblib.dump(pca_models, os.path.join(PCA_DIR, "fitted_pca_models.pkl"))

@@ -1,3 +1,4 @@
+import joblib
 import pandas as pd
 import numpy as np
 from sklearn.preprocessing import PowerTransformer, FunctionTransformer
@@ -55,15 +56,25 @@ def adaptive_transform(data_path: str) -> str:
 
     output_dir = 'artifacts/preprocessing/transformed'
     os.makedirs(output_dir, exist_ok=True)
-    file_path = os.path.join(output_dir, 'train_ada_transformed.csv')
+
+    transformed_file_path = os.path.join(output_dir, 'train_ada_transformed.csv')
+    transformers_file_path = os.path.join(output_dir,'adaptive_transformers.pkl')
+
+    try:
+        joblib.dump(transformers, transformers_file_path)
+        logger.info(f"Adaptive transformers saved to {transformers_file_path}")
+    except Exception as e:
+        logger.exception(f"Failed to save transformers to {transformers_file_path}: {e}")
+        raise
 
     try:
         transformed_df = pd.DataFrame(transformed_data)
         transformed_df['Bankrupt?']=bankrupt
-        transformed_df.to_csv(file_path, index=False)
-        logger.info(f"Transformed data saved to {file_path}")
+        transformed_df.to_csv(transformed_file_path, index=False)
+        logger.info(f"Transformed data saved to {transformed_file_path}")
     except Exception as e:
-        logger.exception(f"Failed to save transformed data to {file_path}: {e}")
+        logger.exception(f"Failed to save transformed data to {transformed_file_path}: {e}")
         raise
+    
 
-    return file_path
+    return transformed_file_path

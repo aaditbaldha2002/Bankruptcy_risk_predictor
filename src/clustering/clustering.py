@@ -1,6 +1,7 @@
 import logging
 import os
 from typing import List, Tuple
+import joblib
 import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
@@ -8,6 +9,7 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 logger = logging.getLogger(__name__)
 
 def clustering(data_path: str) -> Tuple[str,List[str]]:
+    base_dir = 'artifacts/clustering'
     try:
         df = pd.read_csv(data_path)
         bankrupt=df['Bankrupt?']
@@ -22,10 +24,9 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
 
     try:
         logger.info("Scaling the dataset...")
-        scl = StandardScaler()
-        scaled_df = pd.DataFrame(scl.fit_transform(df), columns=df.columns)
         min_max_scaler = MinMaxScaler()
         final_scaled_df = pd.DataFrame(min_max_scaler.fit_transform(df), columns=df.columns)
+        joblib.dump(min_max_scaler,f'{base_dir}/min_max_scaler_before_clustering.pkl')
         logger.info("Scaling completed successfully")
     except Exception as e:
         logger.exception(f"Error during scaling: {e}")
@@ -46,7 +47,6 @@ def clustering(data_path: str) -> Tuple[str,List[str]]:
         logger.info("Storing the artifacts...")
         cluster_dfs = []
         cluster_file_paths = []
-        base_dir = 'artifacts/clustering'
         os.makedirs(base_dir, exist_ok=True)
 
         clustering_file_path = os.path.join(base_dir, 'clustering_intermediate_train_data.csv')
