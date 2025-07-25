@@ -20,7 +20,6 @@ artifacts/
 *.dvc.lock
 .cache/
 .cache.dvc/
-data/
 output/
 !dvc.yaml
 
