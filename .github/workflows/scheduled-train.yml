@@ -27,7 +27,7 @@ jobs:
 
       - name: Pull DVC data/artifacts
         run: |
-          dvc pull --verbose
+          dvc pull -r s3remote --verbose
 
       - name: Initialize ZenML repo and import stack
         run: |

@@ -1,49 +1,44 @@
-# === ZenML ===
+# ZenML config and cache
 .zen/
 .zenml/
 
-# === Environment ===
+# Environment variables
 .env
 *.env
 .env.*
 
-# === Python Bytecode ===
+# Python bytecode
 __pycache__/
 *.py[cod]
 *.so
 
-# === DVC Artifacts ===
+# DVC cache
+.dvc/cache/
+
+# DVC tracked artifacts (do NOT ignore these if you want them in Git)
 data/
 artifacts/
-.artifacts/
-.dvc/
-.cache/
-.cache.dvc/
-output/
-!dvc.yaml
 
-# === MLflow ===
+# MLflow tracking
 mlruns/
 
-# === Logs and Reports ===
+# Logs and reports
 *.log
 *.out
 *.err
 
-# === Notebooks Checkpoints ===
+# Notebooks checkpoints
 .ipynb_checkpoints/
 
-# === VSCode ===
+# VSCode settings
 .vscode/
 
-# === OS-Specific ===
+# OS-specific files
 .DS_Store
 Thumbs.db
 
-# === Testing / Coverage ===
+# Testing and coverage
 .coverage
 *.cover
 htmlcov/
 pytest_cache/
-/artifacts
-/data
