@@ -31,10 +31,16 @@ jobs:
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
 
-
       - name: Set ZenML project and stack
         run: |
           zenml stack set bankruptcy_risk_stack
+
+      - name: Show repo file structure
+        run: |
+          echo "📁 Showing current working directory:"
+          pwd
+          echo "📂 Listing all files and folders:"
+          ls -R
 
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
