@@ -12,8 +12,6 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-      ZENML_ACTIVE_PROJECT_ID: ${{ secrets.ZENML_ACTIVE_PROJECT_ID }}
-      ZENML_ACTIVE_STACK_ID: ${{ secrets.ZENML_ACTIVE_STACK_ID }}
 
     steps:
       - name: Checkout
@@ -24,16 +22,21 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install dependencies and initialize ZenML
-        run: |
-          pip install -r requirements.txt
+      - name: Install dependencies
+        run: pip install -r requirements.txt
 
-      - name: Import ZenML stack
+      - name: Initialize ZenML repo and import stack
         run: |
-          git init  # ZenML needs this
+          git init
           zenml init
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
+
+      - name: Create project if it doesn't exist
+        run: |
+          if ! zenml project list | grep bankruptcy_risk_project; then
+            zenml project create bankruptcy_risk_project
+          fi
 
       - name: Set ZenML project and stack
         run: |
