@@ -32,15 +32,9 @@ jobs:
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
 
-      - name: Create project if it doesn't exist
-        run: |
-          if ! zenml project list | grep bankruptcy_risk_project; then
-            zenml project create bankruptcy_risk_project
-          fi
 
       - name: Set ZenML project and stack
         run: |
-          zenml project set bankruptcy_risk_project
           zenml stack set bankruptcy_risk_stack
 
       - name: Run ZenML pipeline
