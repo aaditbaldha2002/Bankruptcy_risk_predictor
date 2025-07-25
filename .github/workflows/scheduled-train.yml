@@ -37,8 +37,8 @@ jobs:
 
       - name: Set ZenML project and stack
         run: |
-          zenml project set "$ZENML_ACTIVE_PROJECT_ID"
-          zenml stack set "$ZENML_ACTIVE_STACK_ID"
-
+          zenml project set bankruptcy_risk_project
+          zenml stack set bankruptcy_risk_stack
+          
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
