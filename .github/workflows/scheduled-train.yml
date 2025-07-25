@@ -29,8 +29,8 @@ jobs:
           pip install -r requirements.txt
           zenml init
           zenml stack import bankruptcy_risk_stack.yaml --force
-          zenml project set ${{ secrets.ZENML_PROJECT_ID }}
-          zenml stack set ${{ secrets.ZENML_STACK_ID }}
+          zenml project set ${{ secrets.ZENML_ACTIVE_PROJECT_ID }}
+          zenml stack set ${{ secrets.ZENML_ACTIVE_STACK_ID }}
 
 
       - name: Run ZenML pipeline
