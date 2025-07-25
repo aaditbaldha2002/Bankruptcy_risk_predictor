@@ -12,9 +12,6 @@ __pycache__/
 *.py[cod]
 *.so
 
-# DVC cache
-.dvc/cache/
-
 # DVC tracked artifacts (do NOT ignore these if you want them in Git)
 data/
 artifacts/
