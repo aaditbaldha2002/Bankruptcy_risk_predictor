@@ -27,7 +27,6 @@ jobs:
 
       - name: Initialize ZenML repo and import stack
         run: |
-          git init
           zenml init
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
