@@ -1,2 +1,2 @@
-active_project_id: 373103f6-fb9a-420a-a60e-2eafcc518767
-active_stack_id: edff680a-98f4-4759-8fa9-bda399bf3a2d
+active_project_id: ${ZENML_ACTIVE_PROJECT_ID}
+active_stack_id: ${ZENML_ACTIVE_STACK_ID}
