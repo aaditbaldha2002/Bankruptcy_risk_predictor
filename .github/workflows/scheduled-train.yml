@@ -13,8 +13,9 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
       AWS_DEFAULT_REGION: 'us-east-1'
+
     steps:
-      - name: Checkout
+      - name: Checkout code
         uses: actions/checkout@v3
 
       - name: Set up Python
@@ -23,19 +24,21 @@ jobs:
           python-version: '3.10'
 
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          pip install -r requirements.txt
+          pip install dvc[s3]  # Ensures S3 support
 
       - name: Configure DVC remote
         run: |
           dvc remote modify s3remote access_key_id $AWS_ACCESS_KEY_ID
           dvc remote modify s3remote secret_access_key $AWS_SECRET_ACCESS_KEY
           dvc remote modify s3remote region $AWS_DEFAULT_REGION
+          dvc remote default s3remote  # Make it the default
 
       - name: Pull DVC data/artifacts
         run: |
-          dvc pull -r s3remote --verbose
-          dvc unprotect artifacts/
-
+          dvc pull --verbose
+          chmod -R +rwx artifacts/  # Ensure read/write/execute access if needed
 
       - name: Initialize ZenML repo and import stack
         run: |
@@ -43,15 +46,15 @@ jobs:
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
 
-      - name: Set ZenML project and stack
+      - name: Set ZenML stack
         run: |
           zenml stack set bankruptcy_risk_stack
 
-      - name: Show repo file structure
+      - name: Show repo file structure (debugging)
         run: |
-          echo "📁 Showing current working directory:"
+          echo "📁 Current working directory:"
           pwd
-          echo "📂 Listing all files and folders:"
+          echo "📂 File tree:"
           ls -R
 
       - name: Run ZenML pipeline
