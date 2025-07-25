@@ -16,8 +16,6 @@ __pycache__/
 artifacts/
 .artifacts/
 .dvc/
-*.dvc
-*.dvc.lock
 .cache/
 .cache.dvc/
 output/
@@ -46,3 +44,5 @@ Thumbs.db
 *.cover
 htmlcov/
 pytest_cache/
+/artifacts
+/data
