@@ -27,7 +27,6 @@ jobs:
 
       - name: Configure DVC remote
         run: |
-          dvc remote add -d s3remote ${{ secrets.S3_BUCKET_NAME }}
           dvc remote modify s3remote access_key_id $AWS_ACCESS_KEY_ID
           dvc remote modify s3remote secret_access_key $AWS_SECRET_ACCESS_KEY
           dvc remote modify s3remote region $AWS_DEFAULT_REGION
