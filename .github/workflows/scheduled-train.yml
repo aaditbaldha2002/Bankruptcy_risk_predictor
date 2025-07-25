@@ -25,9 +25,10 @@ jobs:
       - name: Install dependencies
         run: pip install -r requirements.txt
 
-      - name: DVC pull
-        run: dvc pull
-
+      - name: Pull DVC data/artifacts
+        run: |
+          dvc pull
+          
       - name: Initialize ZenML repo and import stack
         run: |
           zenml init
