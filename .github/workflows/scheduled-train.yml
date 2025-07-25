@@ -27,7 +27,7 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          zenml init --no-repo-check
+          zenml init
           zenml stack import bankruptcy_risk_stack.yaml --force
           zenml stack set ml_stack
 
