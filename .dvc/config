@@ -4,4 +4,3 @@
     url = C:/Users/aadit/Job_Preparation/Project/DVC_store
 ['remote "s3remote"']
     url = s3://bankruptcy-risk-bucket/dvc-store
-    profile = default
