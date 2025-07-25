@@ -27,11 +27,11 @@ jobs:
       - name: Install dependencies and initialize ZenML
         run: |
           pip install -r requirements.txt
-          git init  # ZenML needs this
-          zenml init
 
       - name: Import ZenML stack
         run: |
+          git init  # ZenML needs this
+          zenml init
           zenml stack delete bankruptcy_risk_stack || true
           zenml stack import bankruptcy_risk_stack.yaml
 
@@ -39,6 +39,6 @@ jobs:
         run: |
           zenml project set bankruptcy_risk_project
           zenml stack set bankruptcy_risk_stack
-          
+
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
