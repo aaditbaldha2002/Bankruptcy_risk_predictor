@@ -1,7 +1,49 @@
-output/
+# === ZenML ===
+.zen/
+.zenml/
+
+# === Environment ===
+.env
+*.env
+.env.*
+
+# === Python Bytecode ===
+__pycache__/
+*.py[cod]
+*.so
+
+# === DVC Artifacts ===
 artifacts/
-/artifacts
+.artifacts/
+.dvc/
+*.dvc
+*.dvc.lock
+.cache/
+.cache.dvc/
+data/
+output/
+!dvc.yaml
+
+# === MLflow ===
 mlruns/
 
-.env
-.zen/
+# === Logs and Reports ===
+*.log
+*.out
+*.err
+
+# === Notebooks Checkpoints ===
+.ipynb_checkpoints/
+
+# === VSCode ===
+.vscode/
+
+# === OS-Specific ===
+.DS_Store
+Thumbs.db
+
+# === Testing / Coverage ===
+.coverage
+*.cover
+htmlcov/
+pytest_cache/
