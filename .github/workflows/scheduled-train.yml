@@ -34,6 +34,8 @@ jobs:
       - name: Pull DVC data/artifacts
         run: |
           dvc pull -r s3remote --verbose
+          dvc unprotect artifacts/
+
 
       - name: Initialize ZenML repo and import stack
         run: |
