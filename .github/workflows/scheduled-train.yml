@@ -1,0 +1,33 @@
+name: Scheduled Model Training
+
+on:
+  schedule:
+    - cron: '0 6 * * *'  # Every day at 6:00 UTC
+  workflow_dispatch:      # Also allows manual trigger
+
+jobs:
+  train:
+    runs-on: ubuntu-latest
+    env:
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
+      ZENML_ACTIVE_STACK_ID: ${{ secrets.ZENML_ACTIVE_STACK_ID }}
+      ZENML_ACTIVE_PROJECT_ID: ${{ secrets.ZENML_ACTIVE_PROJECT_ID }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.10'
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+          zenml init --no-repo-check
+
+      - name: Run ZenML pipeline
+        run: python run_deploy_pipeline.py
