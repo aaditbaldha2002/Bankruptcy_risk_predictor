@@ -1,8 +1,24 @@
 import logging
+import os
+import joblib
 import pandas as pd
 
 from src.inferencing.predict_on_cluster_label import register_inferrer
 
 @register_inferrer(1)
 def cluster_1_prediction(file_path:str)->int:
-    pass
+    ARTIFACTS_DIR=os.path.join('../../artifacts','cluster_1')
+    PREPROCESS_DIR=os.path.join(ARTIFACTS_DIR,'preprocessing')
+    MODEL_REGISTRY=os.path.join('../../model_registry','latest_models','cluster_1_regressor')
+    scaler=joblib.load(os.path.join(PREPROCESS_DIR,'scaler.pkl'))
+    cols_to_drop=joblib.load(os.path.join(PREPROCESS_DIR,'columns_to_drop.pkl'))
+
+    input_data=joblib.load(file_path)
+    transformed_input_data=scaler.transform(input_data)
+
+    final_input_data=transformed_input_data.drop(columns=[col for col in cols_to_drop if col in transformed_input_data.columns])
+
+    cluster_1_model=joblib.load(os.path.join(MODEL_REGISTRY,'model.pkl'))
+
+    final_prediction=cluster_1_model.predict(final_input_data)
+    return final_prediction
