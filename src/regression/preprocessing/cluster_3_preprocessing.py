@@ -23,6 +23,7 @@ def cluster_3_preprocessing(data_path:str)->str:
                                   'Quick Ratio',
                                   'Long-term Liability to Current Assets',
                                   'Cash/Current Liability',
+                                  'Bankrupt?'
                                   ]
     
     dataset=dataset.drop(columns=columns_to_drop)
