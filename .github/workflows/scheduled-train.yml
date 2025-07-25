@@ -27,8 +27,8 @@ jobs:
 
       - name: Pull DVC data/artifacts
         run: |
-          dvc pull
-          
+          dvc pull --verbose
+
       - name: Initialize ZenML repo and import stack
         run: |
           zenml init
