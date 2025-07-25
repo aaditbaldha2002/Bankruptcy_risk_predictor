@@ -12,7 +12,7 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-      AWS_DEFAULT_REGION: 'us-ease-1'
+      AWS_DEFAULT_REGION: 'us-east-1'
     steps:
       - name: Checkout
         uses: actions/checkout@v3
@@ -24,6 +24,13 @@ jobs:
 
       - name: Install dependencies
         run: pip install -r requirements.txt
+
+      - name: Configure DVC remote
+        run: |
+          dvc remote add -d s3remote ${{ secrets.S3_BUCKET_NAME }}
+          dvc remote modify s3remote access_key_id $AWS_ACCESS_KEY_ID
+          dvc remote modify s3remote secret_access_key $AWS_SECRET_ACCESS_KEY
+          dvc remote modify s3remote region $AWS_DEFAULT_REGION
 
       - name: Pull DVC data/artifacts
         run: |
