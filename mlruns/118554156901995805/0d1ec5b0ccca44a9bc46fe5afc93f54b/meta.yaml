@@ -1,0 +1,15 @@
+artifact_uri: file:///C:/Users/aadit/Stevens%20Institute%20of%20Technology/Sem%202/ML%20Fundamentals%20And%20Application/Assignments/Project/ML_Project_Spring_2025/mlruns/118554156901995805/0d1ec5b0ccca44a9bc46fe5afc93f54b/artifacts
+end_time: 1752968892928
+entry_point_name: ''
+experiment_id: '118554156901995805'
+lifecycle_stage: active
+run_id: 0d1ec5b0ccca44a9bc46fe5afc93f54b
+run_name: XGB-CV-SMOTE-Cluster4
+run_uuid: 0d1ec5b0ccca44a9bc46fe5afc93f54b
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1752968882849
+status: 3
+tags: []
+user_id: aadit
