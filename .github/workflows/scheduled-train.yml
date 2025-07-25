@@ -12,8 +12,8 @@ jobs:
       AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
-      ZENML_STACK_NAME: ${{ secrets.ZENML_STACK_NAME }}
-      ZENML_PROJECT_NAME: ${{ secrets.ZENML_PROJECT_NAME }}
+      ZENML_ACTIVE_PROJECT_ID: ${{ secrets.ZENML_ACTIVE_PROJECT_ID }}
+      ZENML_ACTIVE_STACK_ID: ${{ secrets.ZENML_ACTIVE_STACK_ID }}
 
     steps:
       - name: Checkout
@@ -37,8 +37,8 @@ jobs:
 
       - name: Set ZenML project and stack
         run: |
-          zenml project set "$ZENML_PROJECT_NAME"
-          zenml stack set "$ZENML_STACK_NAME"
+          zenml project set "$ZENML_ACTIVE_PROJECT_ID"
+          zenml stack set "$ZENML_ACTIVE_STACK_ID"
 
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
