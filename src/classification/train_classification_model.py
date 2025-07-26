@@ -111,11 +111,8 @@ def train_classification_model(data_path: str) -> str:
             # Create registered model if it does not exist
             try:
                 client.get_registered_model(model_name)
-            except mlflow.MlflowException as e:
-                if "RESOURCE_DOES_NOT_EXIST" in str(e):  # MLflow typically signals not found this way
-                    client.create_registered_model(model_name)
-                else:
-                    raise
+            except Exception as e:
+                client.create_registered_model(model_name)
                 
             # Register a new model version pointing to the logged artifact
             client.create_model_version(
