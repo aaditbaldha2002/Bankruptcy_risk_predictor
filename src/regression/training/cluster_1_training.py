@@ -91,8 +91,24 @@ def cluster_1_training(data_path: str) -> str:
             mlflow.log_metric("optimal_threshold", optimal_threshold)
 
             logger.info("Logging model to MLflow...")
-            mlflow.sklearn.log_model(best_model, "cluster_1_regression_model")
+            model_name='cluster_1_regression_model'
+            mlflow.sklearn.log_model(best_model, model_name)
+
             model_uri = f"runs:/{run_id}/cluster_1_regression_model"
+            client = mlflow.MlflowClient()
+            try:
+                client.get_registered_model(model_name)
+            except Exception as e:
+                client.create_registered_model(model_name)
+                
+            # Register a new model version pointing to the logged artifact
+            client.create_model_version(
+                name=model_name,
+                source=model_uri,  # your logged model artifact URI
+                run_id=run_id
+            )
+
+
             logger.info("Model saved at: %s", model_uri)
 
             return model_uri

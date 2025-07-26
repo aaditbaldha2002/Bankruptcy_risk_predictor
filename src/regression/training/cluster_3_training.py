@@ -94,8 +94,23 @@ def cluster_3_training(data_path: str) -> str:
                 "f2_score": best_f2,
                 "best_threshold": best_threshold
             })
-            mlflow.sklearn.log_model(best_model, "cluster_3_regression_model")
+
+            model_name='cluster_3_regression_model'
+            mlflow.sklearn.log_model(best_model, model_name)
             model_uri = f"runs:/{run_id}/cluster-3-regression-model"
+            client = mlflow.MlflowClient()
+            try:
+                client.get_registered_model(model_name)
+            except Exception as e:
+                client.create_registered_model(model_name)
+                
+            # Register a new model version pointing to the logged artifact
+            client.create_model_version(
+                name=model_name,
+                source=model_uri,  # your logged model artifact URI
+                run_id=run_id
+            )
+
             logger.info("Model saved at URI: %s", model_uri)
             return model_uri
 

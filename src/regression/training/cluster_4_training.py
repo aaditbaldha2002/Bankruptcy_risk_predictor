@@ -81,7 +81,21 @@ def cluster_4_training(data_path: str) -> str:
             logger.info("Logging representative model to MLflow")
             final_model = clone(base_model)
             final_model.fit(X_scaled, y, verbose=False)
-            mlflow.sklearn.log_model(final_model, "cluster_4_regression_model")
+            
+            model_name='cluster_4_regression_model'
+            mlflow.sklearn.log_model(final_model, model_name)
+            client = mlflow.MlflowClient()
+            try:
+                client.get_registered_model(model_name)
+            except Exception as e:
+                client.create_registered_model(model_name)
+                
+            # Register a new model version pointing to the logged artifact
+            client.create_model_version(
+                name=model_name,
+                source=model_uri,  # your logged model artifact URI
+                run_id=run_id
+            )
 
             model_uri = f"runs:/{run_id}/cluster_4_regression_model"
             logger.info("Model URI: %s", model_uri)

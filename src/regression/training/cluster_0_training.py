@@ -103,10 +103,25 @@ def cluster_0_training(data_path: str) -> str:
             final_score = average_precision_score(y_test, y_scores)
             mlflow.log_metric("average_precision_score", final_score)
 
+            model_name='cluster_0_regression_model'
             logger.info("Logging model artifact to MLflow...")
-            mlflow.sklearn.log_model(best_model, artifact_path="cluster_0_regression_model")
-
+            mlflow.sklearn.log_model(best_model, artifact_path=model_name)
+        
+            client = mlflow.MlflowClient()
             model_uri = f"runs:/{run_id}/cluster_0_regression_model"
+            try:
+                client.get_registered_model(model_name)
+            except Exception as e:
+                client.create_registered_model(model_name)
+                
+            # Register a new model version pointing to the logged artifact
+            client.create_model_version(
+                name=model_name,
+                source=model_uri,  # your logged model artifact URI
+                run_id=run_id
+            )
+
+
             logger.info("Model logged successfully at: %s", model_uri)
 
             return model_uri
