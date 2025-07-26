@@ -83,6 +83,7 @@ def cluster_4_training(data_path: str) -> str:
             final_model.fit(X_scaled, y, verbose=False)
             
             model_name='cluster_4_regression_model'
+            model_uri = f"runs:/{run_id}/cluster_4_regression_model"
             mlflow.sklearn.log_model(final_model, model_name)
             client = mlflow.MlflowClient()
             try:
@@ -97,7 +98,6 @@ def cluster_4_training(data_path: str) -> str:
                 run_id=run_id
             )
 
-            model_uri = f"runs:/{run_id}/cluster_4_regression_model"
             logger.info("Model URI: %s", model_uri)
             return model_uri
 
