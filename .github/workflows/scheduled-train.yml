@@ -35,6 +35,10 @@ jobs:
           dvc remote modify s3remote region $AWS_DEFAULT_REGION
           dvc remote default s3remote  # Make it the default
 
+      - name: Test S3 Access
+        run: |
+          aws s3 ls s3://bankruptcy-risk-bucket/dvc-store/
+
       - name: Pull DVC data/artifacts
         run: |
           dvc pull --verbose
