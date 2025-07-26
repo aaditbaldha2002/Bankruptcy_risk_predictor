@@ -37,7 +37,7 @@ def cluster_0_preprocessing(data_path: str) -> str:
         cols_to_drop = [
             'Cash/Total Assets', 'Total debt/Total net worth', 'Equity to Long-term Liability',
             'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
-            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability'
+            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability','Bankrupt?'
         ]
         joblib.dump(cols_to_drop,f'{output_dir}/cols_to_drop_before_pca.pkl')
         pca_dir=os.path.join(output_dir,'pca')
