@@ -35,21 +35,15 @@ jobs:
           dvc remote modify s3remote region $AWS_DEFAULT_REGION
           dvc remote default s3remote  # Make it the default
 
-      - name: Test S3 Access
-        run: |
-          aws s3 ls s3://bankruptcy-risk-bucket/dvc-store/
-
       - name: Pull DVC data/artifacts
         run: |
           dvc pull --verbose
           chmod -R u+rwX,go+rX,go-w artifacts/
 
-      - name: Check processed_data.csv permissions and type
+      - name: Print processed data preview
         run: |
-          ls -l artifacts/cluster_0/preprocessing/processed_data.csv
-          file artifacts/cluster_0/preprocessing/processed_data.csv
-          cat artifacts/cluster_0/preprocessing/processed_data.csv | head -n 5 || echo "🚨 Cannot read file"
-
+          head -n 5 artifacts/cluster_0/preprocessing/processed_data.csv
+          
       - name: Initialize ZenML repo and import stack
         run: |
           zenml init
@@ -59,13 +53,6 @@ jobs:
       - name: Set ZenML stack
         run: |
           zenml stack set bankruptcy_risk_stack
-
-      - name: Show repo file structure (debugging)
-        run: |
-          echo "📁 Current working directory:"
-          pwd
-          echo "📂 File tree:"
-          ls -R
 
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
