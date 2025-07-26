@@ -44,7 +44,7 @@ def register_models_step(classifier_model_uri: str, regressor_model_uris: List[s
     # --- Register Regressor Models ---
     artifact_regressor_model_uris = []
     for cluster_id, regressor_model_uri in enumerate(regressor_model_uris):
-        regressor_model_name = f"cluster_{cluster_id}_regressor_model"
+        regressor_model_name = f"cluster_{cluster_id}_regression_model"
         recreate_registered_model(regressor_model_name)
         regressor_version = client.create_model_version(
             name=regressor_model_name,
