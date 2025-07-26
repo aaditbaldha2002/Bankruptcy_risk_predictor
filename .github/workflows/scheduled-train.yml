@@ -38,8 +38,7 @@ jobs:
       - name: Pull DVC data/artifacts
         run: |
           dvc pull --verbose
-          chmod -R +rwx artifacts/  # Ensure read/write/execute access if needed
-          ls -l artifacts/cluster_0/preprocessing/processed_data.csv
+          chmod -R u+rwX,go+rX,go-w artifacts/
 
       - name: Initialize ZenML repo and import stack
         run: |
