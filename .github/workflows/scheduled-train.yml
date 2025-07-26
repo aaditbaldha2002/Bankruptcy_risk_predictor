@@ -44,6 +44,12 @@ jobs:
           dvc pull --verbose
           chmod -R u+rwX,go+rX,go-w artifacts/
 
+      - name: Check processed_data.csv permissions and type
+        run: |
+          ls -l artifacts/cluster_0/preprocessing/processed_data.csv
+          file artifacts/cluster_0/preprocessing/processed_data.csv
+          cat artifacts/cluster_0/preprocessing/processed_data.csv | head -n 5 || echo "🚨 Cannot read file"
+
       - name: Initialize ZenML repo and import stack
         run: |
           zenml init
