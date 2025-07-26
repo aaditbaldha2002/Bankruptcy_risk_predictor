@@ -17,12 +17,11 @@ def register_models_step(classifier_model_uri: str, regressor_model_uris: List[s
             client.get_registered_model(model_name)
             logging.warning(f"Model '{model_name}' already exists. Deleting it.")
             client.delete_registered_model(name=model_name)
-        except RestException as e:
+        except Exception as e:
             if e.error_code == "RESOURCE_DOES_NOT_EXIST":
                 logging.info(f"Model '{model_name}' does not exist. Proceeding to create.")
             else:
                 logging.error(f"Unexpected error while checking model '{model_name}': {e}")
-                raise
         client.create_registered_model(model_name)
         logging.info(f"Model '{model_name}' registered successfully.")
 
