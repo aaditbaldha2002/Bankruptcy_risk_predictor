@@ -104,6 +104,24 @@ def train_classification_model(data_path: str) -> str:
             mlflow.sklearn.log_model(reduced_search.best_estimator_, artifact_path="cluster_classification_model")
 
             model_uri = f"runs:/{run_id}/cluster_classification_model"
+            
+            client = mlflow.MlflowClient()
+            model_name = "cluster_classification_model"
+
+            # Create registered model if it does not exist
+            try:
+                client.get_registered_model(model_name)
+            except Exception as e:
+                client.create_registered_model(model_name)
+                
+            # Register a new model version pointing to the logged artifact
+            client.create_model_version(
+                name=model_name,
+                source=model_uri,  # your logged model artifact URI
+                run_id=run_id
+            )
+
+
             logger.info("Model logged at URI: %s", model_uri)
             return model_uri
 

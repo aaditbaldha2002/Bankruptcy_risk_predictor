@@ -1,6 +1,41 @@
-output/
+# ZenML config and cache
+.zen/
+.zenml/
+
+# Environment variables
+.env
+*.env
+.env.*
+
+# Python bytecode
+__pycache__/
+*.py[cod]
+*.so
+
+# DVC tracked artifacts (do NOT ignore these if you want them in Git)
+data/
 artifacts/
-/artifacts
+
+# MLflow tracking
 mlruns/
 
-.env
+# Logs and reports
+*.log
+*.out
+*.err
+
+# Notebooks checkpoints
+.ipynb_checkpoints/
+
+# VSCode settings
+.vscode/
+
+# OS-specific files
+.DS_Store
+Thumbs.db
+
+# Testing and coverage
+.coverage
+*.cover
+htmlcov/
+pytest_cache/

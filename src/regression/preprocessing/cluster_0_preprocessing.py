@@ -37,7 +37,7 @@ def cluster_0_preprocessing(data_path: str) -> str:
         cols_to_drop = [
             'Cash/Total Assets', 'Total debt/Total net worth', 'Equity to Long-term Liability',
             'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
-            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability'
+            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability','Bankrupt?'
         ]
         joblib.dump(cols_to_drop,f'{output_dir}/cols_to_drop_before_pca.pkl')
         pca_dir=os.path.join(output_dir,'pca')
@@ -62,10 +62,6 @@ def cluster_0_preprocessing(data_path: str) -> str:
         if os.path.isfile(output_dir):
             raise RuntimeError(f"Expected {output_dir} to be a directory, but it's a file. Please delete or rename it.")
         
-        for file in os.listdir(output_dir):
-            file_path = os.path.join(output_dir, file)
-            if os.path.isfile(file_path):
-                os.chmod(file_path, stat.S_IWRITE)  # Make file writable
 
         # Persist artifacts
         joblib.dump(dropped_cols, os.path.join(pca_dir, 'columns_to_drop.pkl'))
@@ -75,6 +71,11 @@ def cluster_0_preprocessing(data_path: str) -> str:
         # Append target back
         final_df[target_col] = bankrupt_
         final_df.to_csv(os.path.join(output_dir, 'processed_data.csv'), index=False)
+
+        for file in os.listdir(output_dir):
+            file_path = os.path.join(output_dir, file)
+            if os.path.isfile(file_path):
+                os.chmod(file_path, 0o666)
 
         logger.info(f"Preprocessing completed and saved to: {output_dir}")
         return os.path.join(output_dir,'processed_data.csv')

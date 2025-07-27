@@ -1,0 +1,23 @@
+components:
+  artifact_store:
+    configuration: {}
+    flavor: local
+    name: default
+    type: artifact_store
+  experiment_tracker:
+    configuration: {}
+    flavor: mlflow
+    name: bankruptcy_risk_tracker
+    type: experiment_tracker
+  model_deployer:
+    configuration: {}
+    flavor: mlflow
+    name: bankruptcy_risk_deployer
+    type: model_deployer
+  orchestrator:
+    configuration: {}
+    flavor: local
+    name: bankruptcy_risk_orchestrator
+    type: orchestrator
+stack_name: bankruptcy_risk_stack
+zenml_version: 0.84.0

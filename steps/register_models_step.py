@@ -17,12 +17,9 @@ def register_models_step(classifier_model_uri: str, regressor_model_uris: List[s
             client.get_registered_model(model_name)
             logging.warning(f"Model '{model_name}' already exists. Deleting it.")
             client.delete_registered_model(name=model_name)
-        except RestException as e:
-            if e.error_code == "RESOURCE_DOES_NOT_EXIST":
-                logging.info(f"Model '{model_name}' does not exist. Proceeding to create.")
-            else:
-                logging.error(f"Unexpected error while checking model '{model_name}': {e}")
-                raise
+        except Exception as e:
+            logging.info(f"Model '{model_name}' does not exist. Proceeding to create.")
+            
         client.create_registered_model(model_name)
         logging.info(f"Model '{model_name}' registered successfully.")
 
@@ -44,7 +41,7 @@ def register_models_step(classifier_model_uri: str, regressor_model_uris: List[s
     # --- Register Regressor Models ---
     artifact_regressor_model_uris = []
     for cluster_id, regressor_model_uri in enumerate(regressor_model_uris):
-        regressor_model_name = f"cluster_{cluster_id}_regressor_model"
+        regressor_model_name = f"cluster_{cluster_id}_regression_model"
         recreate_registered_model(regressor_model_name)
         regressor_version = client.create_model_version(
             name=regressor_model_name,

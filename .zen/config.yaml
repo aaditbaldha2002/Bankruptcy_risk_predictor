@@ -1,2 +1,0 @@
-active_project_id: ${ZENML_ACTIVE_PROJECT_ID}
-active_stack_id: ${ZENML_ACTIVE_STACK_ID}
