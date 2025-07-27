@@ -30,4 +30,11 @@ def cluster_1_preprocessing(data_path:str)->str:
 
     dataset.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
 
+    for root, dirs, files in os.walk(output_dir):
+        for d in dirs:
+            os.chmod(os.path.join(root, d), 0o777)
+        for f in files:
+            file_path = os.path.join(root, f)
+            os.chmod(file_path, 0o666)
+
     return os.path.join(output_dir,'processed_data.csv')

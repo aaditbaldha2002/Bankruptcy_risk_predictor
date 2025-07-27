@@ -72,9 +72,11 @@ def cluster_0_preprocessing(data_path: str) -> str:
         final_df[target_col] = bankrupt_
         final_df.to_csv(os.path.join(output_dir, 'processed_data.csv'), index=False)
 
-        for file in os.listdir(output_dir):
-            file_path = os.path.join(output_dir, file)
-            if os.path.isfile(file_path):
+        for root, dirs, files in os.walk(output_dir):
+            for d in dirs:
+                os.chmod(os.path.join(root, d), 0o777)
+            for f in files:
+                file_path = os.path.join(root, f)
                 os.chmod(file_path, 0o666)
 
         logger.info(f"Preprocessing completed and saved to: {output_dir}")

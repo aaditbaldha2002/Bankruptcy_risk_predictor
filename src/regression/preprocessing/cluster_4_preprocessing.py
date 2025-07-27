@@ -17,7 +17,7 @@ def cluster_4_preprocessing(data_path:str)->str:
     bankrupt_=dataset['Bankrupt?']
     dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
     
-    joblib.dump(sc,f'{output_dir}/scaler.pkl')
+    joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
     
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
         dataset,
@@ -41,4 +41,12 @@ def cluster_4_preprocessing(data_path:str)->str:
     final_df['Bankrupt?']=bankrupt_
 
     final_df.to_csv(os.path.join(output_dir,'preprocessed_data.csv'))
+    os.chmod(output_dir,0o777)
+    for root, dirs, files in os.walk(output_dir):
+        for d in dirs:
+            os.chmod(os.path.join(root, d), 0o777)
+        for f in files:
+            file_path = os.path.join(root, f)
+            os.chmod(file_path, 0o666)
+
     return os.path.join(output_dir,'preprocessed_data.csv')

@@ -54,4 +54,11 @@ def cluster_2_preprocessing(data_path:str)->str:
     joblib.dump(pca_pairs_df, f'{pca_dir}/pca_pairs_used.pkl')
     joblib.dump(pca_models, f'{pca_dir}/fitted_pca_models.pkl')
 
+    for root, dirs, files in os.walk(output_dir):
+        for d in dirs:
+            os.chmod(os.path.join(root, d), 0o777)
+        for f in files:
+            file_path = os.path.join(root, f)
+            os.chmod(file_path, 0o666)
+
     return os.path.join(output_dir,'processed_data.csv')
