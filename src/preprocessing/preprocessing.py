@@ -16,7 +16,7 @@ def preprocess_data(data_path: str) -> str:
         indexes = dataset['Index']
         bankrupt = dataset['Bankrupt?']
         dataset = dataset.drop(columns=['Index', 'Bankrupt?'])
-        ARTIFACTS_DIR = "artifacts/preprocessing"
+        ARTIFACTS_DIR = os.path.join('artifacts','preprocessing')
 
         # Scaling
         logging.info("[Preprocessing] Applying StandardScaler.")

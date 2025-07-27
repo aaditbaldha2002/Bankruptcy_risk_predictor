@@ -8,12 +8,12 @@ from src.inferencing.predict_on_cluster_label import register_inferrer
 
 @register_inferrer(0)
 def cluster_0_prediction(file_path:str)->int:
-    ARTIFACTS_DIR=os.path.join('../../artifacts','cluster_0')
+    ARTIFACTS_DIR=os.path.join('artifacts','cluster_0')
     PREPROCESS_DIR=os.path.join(ARTIFACTS_DIR,'preprocessing')
     PCA_DIR=os.path.join(PREPROCESS_DIR,'pca')
-    MODEL_REGISTRY_DIR=os.path.join('../../model_registry','latest_models')
+    MODEL_REGISTRY_DIR=os.path.join('model_registry','latest_models')
 
-    input_data=joblib.load(file_path)
+    input_data=pd.read_csv(file_path)
     scaler=joblib.load(os.path.join(PREPROCESS_DIR,'standard_scaler.pkl'))
     transformed_input_data=scaler.transform(input_data)
 

@@ -1,4 +1,6 @@
 import logging
+import os
+import joblib
 import mlflow
 import pandas as pd
 from sklearn.model_selection import GridSearchCV, StratifiedKFold, cross_validate, train_test_split
@@ -43,6 +45,8 @@ def train_classification_model(data_path: str) -> str:
         feature_importances = pd.Series(base_search.best_estimator_.feature_importances_, index=X.columns)
         top_n = 28
         top_features = feature_importances.sort_values(ascending=False).head(top_n).index.tolist()
+        CLUSTERING_DIR=os.path.join('artifacts','clustering')
+        joblib.dump(top_features,os.path.join(CLUSTERING_DIR,'top_28_features.pkl'))
 
         top_df = df[top_features + ['Cluster']]
         X = top_df.drop(columns=['Cluster'])

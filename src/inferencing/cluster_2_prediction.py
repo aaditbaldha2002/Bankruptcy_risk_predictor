@@ -8,14 +8,14 @@ from src.inferencing.predict_on_cluster_label import register_inferrer
 
 @register_inferrer(2)
 def cluster_2_prediction(file_path)->int:
-    ARTIFACTS_DIR=os.path.join('../../artifacts','cluster_2')
+    ARTIFACTS_DIR=os.path.join('artifacts','cluster_2')
     PREPROCESS_DIR=os.path.join(ARTIFACTS_DIR,'preprocessing')
     PCA_DIR=os.path.join(PREPROCESS_DIR,'pca')
-    MODEL_REGISTRY=os.path.join('../../model_registry','latest_models','cluster_2_regressor')
+    MODEL_REGISTRY=os.path.join('model_registry','latest_models','cluster_2_regressor')
 
     scaler=joblib.load(os.path.join(PREPROCESS_DIR,'scaler.pkl'))
     cols_to_drop_before_pca=joblib.load(os.path.join(PREPROCESS_DIR,'columns_to_drop.pkl'))
-    input_data = joblib.load(file_path)
+    input_data = pd.read_csv(file_path)
     dropped_cols=joblib.load(PCA_DIR,'columns_to_drop.pkl')
     pca_pairs_df=joblib.load(PCA_DIR,'pca_pairs_used.pkl')
     pca_models=joblib.load(PCA_DIR,'fitted_pca_models.pkl')
