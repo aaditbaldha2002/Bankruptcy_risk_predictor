@@ -1,6 +1,6 @@
 outs:
-- md5: 232d23f0c6c4ff3e9c0ba71a0cded32e.dir
-  size: 1133624
+- md5: b130d126fd976b0d1f0694db0c8cac2b.dir
+  size: 1133789
   nfiles: 5
   hash: md5
   path: classifier
