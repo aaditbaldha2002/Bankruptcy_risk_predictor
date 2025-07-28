@@ -3,7 +3,7 @@ import pandas as pd
 from zenml.steps import step
 from src.preprocessing.preprocessing import preprocess_data
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def preprocess_step(data_path: str) -> str:
     logging.info('Started preprocess_step...')
     try:

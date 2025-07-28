@@ -16,13 +16,13 @@ def cluster_3_prediction(file_path)->int:
     scaler=joblib.load(os.path.join(PREPROCESS_DIR,'scaler.pkl'))
     cols_to_drop_before_pca=joblib.load(os.path.join(PREPROCESS_DIR,'columns_to_drop.pkl'))
     input_data = pd.read_csv(file_path)
-    dropped_cols=joblib.load(PCA_DIR,'columns_to_drop.pkl')
-    pca_pairs_df=joblib.load(PCA_DIR,'pca_pairs_used.pkl')
-    pca_models=joblib.load(PCA_DIR,'fitted_pca_models.pkl')
+    dropped_cols=joblib.load(os.path.join(PCA_DIR,'columns_to_drop.pkl'))
+    pca_pairs_df=joblib.load(os.path.join(PCA_DIR,'pca_pairs_used.pkl'))
+    pca_models=joblib.load(os.path.join(PCA_DIR,'fitted_pca_models.pkl'))
 
-    input_data=joblib.load(file_path)
+    input_data=pd.read_csv(file_path)
     input_data=input_data.drop(columns=cols_to_drop_before_pca)
-    scaled_input_data=scaler.transform(input_data)
+    scaled_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
 
     pca_input_data=scaled_input_data.drop(columns=dropped_cols)
     pca_transformed_data=inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)

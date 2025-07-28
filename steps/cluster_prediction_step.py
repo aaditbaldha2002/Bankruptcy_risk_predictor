@@ -10,7 +10,7 @@ from src.clustering.clustering import clustering
 
 logger = logging.getLogger(__name__)
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def cluster_prediction_step(data_path: str) -> Tuple[str,List[str]]:
     try:
         logger.info("Starting the clustering step...")

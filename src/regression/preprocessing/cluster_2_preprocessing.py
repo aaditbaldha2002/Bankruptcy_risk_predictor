@@ -28,10 +28,9 @@ def cluster_2_preprocessing(data_path:str)->str:
                                     'Quick Ratio',
                                     'Current Ratio',
                                     'Quick Assets/Current Liability',
-                                    'Bankrupt?'
                                     ]
 
-    dataset=dataset.drop(columns=columns_to_drop)
+    dataset=dataset.drop(columns=columns_to_drop+['Bankrupt?'])
     joblib.dump(columns_to_drop,os.path.join(output_dir,'columns_to_drop.pkl'))
 
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(

@@ -20,7 +20,7 @@ from src.regression.training.cluster_4_training import cluster_4_training
 from src.regression.preprocess_cluster_data import preprocess_cluster_data
 from src.regression.train_model_for_cluster import train_model_for_cluster
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def train_regressor_model_step(data_paths:List[str])->List[str]:
     logging.info("Starting regressor models training step ...")
     model_uris:List[str]=[]

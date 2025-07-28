@@ -13,7 +13,7 @@ from src.classification.train_classification_model import train_classification_m
 
 logger = logging.getLogger(__name__)
 
-@step(enable_cache=False)
+@step(enable_cache=True)
 def train_classification_model_step(data_path: str) -> str:
     logger.info("Starting train_classification_model_step...")
     classifier_model_uri=train_classification_model(data_path)
