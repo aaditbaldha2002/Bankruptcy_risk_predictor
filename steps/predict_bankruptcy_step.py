@@ -11,7 +11,7 @@ from src.inferencing.cluster_4_prediction import cluster_4_prediction
 
 
 @step(enable_cache=True)
-def predict_bankruptcy_step(transformed_data_file_path:str,cluster_label:int)->np.int64:
+def predict_bankruptcy_step(transformed_data_file_path:str,cluster_label:int)->int:
     try:
         logging.info("Starting the predict_bankruptcy_step step ...")
         final_prediction=predict_on_cluster_label(transformed_data_file_path,cluster_label)

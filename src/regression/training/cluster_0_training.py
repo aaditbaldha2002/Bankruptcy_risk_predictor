@@ -1,9 +1,11 @@
 from itertools import product
 import logging
+import os
+import joblib
 import numpy as np
 import pandas as pd
 import mlflow
-from sklearn.metrics import average_precision_score
+from sklearn.metrics import average_precision_score, precision_recall_curve
 from sklearn.model_selection import train_test_split
 from xgboost import XGBRanker
 from src.regression.train_model_for_cluster import register_trainer
@@ -80,7 +82,17 @@ def cluster_0_training(data_path: str) -> str:
                     'colsample_bytree': cs
                 }
 
+            
+
         logger.info("Best score: %.4f with parameters: %s", best_score, best_params)
+
+        precision, recall, thresholds = precision_recall_curve(y_test, y_pred)
+
+        # Choose threshold where precision and recall balance
+        f1_scores = 2 * precision * recall / (precision + recall + 1e-10)
+        best_index = np.argmax(f1_scores)
+        best_threshold = thresholds[best_index]
+
 
         # 🚀 MLflow Tracking
         mlflow.set_tracking_uri(mlflow.get_tracking_uri())
@@ -102,6 +114,12 @@ def cluster_0_training(data_path: str) -> str:
             y_scores = best_model.predict(X_test)
             final_score = average_precision_score(y_test, y_scores)
             mlflow.log_metric("average_precision_score", final_score)
+            mlflow.log_metric("Optimal threshold",best_threshold)
+            ARTIFACTS_DIR='artifacts'
+            MODEL_DIR=os.path.join(ARTIFACTS_DIR,'cluster_0','model')
+            os.makedirs(MODEL_DIR,exist_ok=True)
+
+            joblib.dump(best_threshold,os.path.join(MODEL_DIR,'model_threshold.pkl'))
 
             model_name='cluster_0_regression_model'
             logger.info("Logging model artifact to MLflow...")
