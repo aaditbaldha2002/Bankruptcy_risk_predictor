@@ -14,11 +14,12 @@ def cluster_1_prediction(file_path:str)->int:
     cols_to_drop=joblib.load(os.path.join(PREPROCESS_DIR,'columns_to_drop.pkl'))
 
     input_data=pd.read_csv(file_path)
-    transformed_input_data=scaler.transform(input_data)
+    transformed_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
 
-    final_input_data=transformed_input_data.drop(columns=[col for col in cols_to_drop if col in transformed_input_data.columns])
+    final_input_data=transformed_input_data.drop(columns=cols_to_drop)
 
     cluster_1_model=joblib.load(os.path.join(MODEL_REGISTRY,'model.pkl'))
 
     final_prediction=cluster_1_model.predict(final_input_data)
-    return final_prediction
+    logging.info(f"Final prediction by cluster 1 regressor:{final_prediction}")
+    return int(final_prediction[0])
