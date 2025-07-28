@@ -2,9 +2,11 @@ import logging
 from typing import List
 
 import pandas as pd
+from zenml.steps import step
 
 from src.inferencing.inference_preprocess_data import inference_preprocess_data
 
+@step(enable_cache=False)
 def inference_preprocess_data_step()->str:
     try:
         logging.info('inference_preprocess_data_step step starting...')

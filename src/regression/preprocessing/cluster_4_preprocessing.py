@@ -15,7 +15,8 @@ def cluster_4_preprocessing(data_path:str)->str:
     dataset=pd.read_csv(data_path)
     sc=StandardScaler()
     bankrupt_=dataset['Bankrupt?']
-    dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
+    dataset.drop(columns=['Bankrupt?'],inplace=True)
+    dataset=pd.DataFrame(sc.fit_transform(dataset),columns=dataset.columns)
     
     joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
     
@@ -34,13 +35,13 @@ def cluster_4_preprocessing(data_path:str)->str:
     pca_dir=os.path.join(output_dir,'pca')
     os.makedirs(pca_dir,exist_ok=True)
     
-    joblib.dump(dropped_cols, f'{pca_dir}/columns_to_drop.pkl')
-    joblib.dump(pca_pairs_df, f'{pca_dir}/pca_pairs_used.pkl')
-    joblib.dump(pca_models, f'{pca_dir}/fitted_pca_models.pkl')
+    joblib.dump(dropped_cols, os.path.join(pca_dir,'columns_to_drop.pkl'))
+    joblib.dump(pca_pairs_df, os.path.join(pca_dir,'pca_pairs_used.pkl'))
+    joblib.dump(pca_models, os.path.join(pca_dir,'fitted_pca_models.pkl'))
 
     final_df['Bankrupt?']=bankrupt_
 
-    final_df.to_csv(os.path.join(output_dir,'preprocessed_data.csv'))
+    final_df.to_csv(os.path.join(output_dir,'preprocessed_data.csv'),index=False)
     os.chmod(output_dir,0o777)
     for root, dirs, files in os.walk(output_dir):
         for d in dirs:

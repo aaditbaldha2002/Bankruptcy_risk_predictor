@@ -15,8 +15,9 @@ def cluster_1_preprocessing(data_path:str)->str:
     dataset=pd.read_csv(data_path)
     sc=StandardScaler()
     bankrupt_=dataset['Bankrupt?']
-    dataset=pd.DataFrame(sc.fit_transform(dataset.iloc[:,:-2]),columns=dataset.columns[:-2])
-    joblib.dump(sc,f'{output_dir}/scaler.pkl')
+    dataset.drop(columns=['Bankrupt?'],inplace=True)
+    dataset=pd.DataFrame(sc.fit_transform(dataset),columns=dataset.columns)
+    joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
     dataset['Bankrupt?']=bankrupt_
 
     columns_to_drop=[
@@ -25,8 +26,8 @@ def cluster_1_preprocessing(data_path:str)->str:
     'Long-term Liability to Current Assets',
     'Interest Expense Ratio'
     ]
-    joblib.dump(columns_to_drop,f'{output_dir}/columns_to_drop.pkl')
     dataset=dataset.drop(columns=columns_to_drop)
+    joblib.dump(columns_to_drop,os.path.join(output_dir,'columns_to_drop.pkl'))
 
     dataset.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
 

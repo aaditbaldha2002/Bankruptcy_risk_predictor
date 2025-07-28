@@ -28,21 +28,29 @@ def cluster_0_preprocessing(data_path: str) -> str:
 
         # Standardize features (excluding last 2 cols and target)
         sc = StandardScaler()
-        features = dataset.iloc[:, :-2]
+        dataset.drop(columns=['Bankrupt?'],inplace=True)
+        features = dataset
         scaled_features = sc.fit_transform(features)
-        joblib.dump(sc,f'{output_dir}/standard_scaler.pkl')
+        joblib.dump(sc,os.path.join(output_dir,'standard_scaler.pkl'))
         dataset = pd.DataFrame(scaled_features, columns=features.columns)
 
         # Drop known redundant/irrelevant features
         cols_to_drop = [
-            'Cash/Total Assets', 'Total debt/Total net worth', 'Equity to Long-term Liability',
-            'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
-            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability','Bankrupt?'
+            'Cash/Total Assets', 
+            'Total debt/Total net worth', 
+            'Equity to Long-term Liability',
+            'Cash/Current Liability', 
+            'Long-term Liability to Current Assets', 
+            'Quick Ratio',
+            'Working capitcal Turnover Rate', 
+            'Current Ratio', 
+            'Quick Assets/Current Liability',
         ]
-        joblib.dump(cols_to_drop,f'{output_dir}/cols_to_drop_before_pca.pkl')
+
+        dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
+        joblib.dump(cols_to_drop,os.path.join(output_dir,'cols_to_drop_before_pca.pkl'))
         pca_dir=os.path.join(output_dir,'pca')
         os.makedirs(pca_dir,exist_ok=True)
-        dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
 
         # Dimensionality reduction
         final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
@@ -57,7 +65,6 @@ def cluster_0_preprocessing(data_path: str) -> str:
             pca_pairs_df = all_pca_pairs
         else:
             pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
-
 
         if os.path.isfile(output_dir):
             raise RuntimeError(f"Expected {output_dir} to be a directory, but it's a file. Please delete or rename it.")

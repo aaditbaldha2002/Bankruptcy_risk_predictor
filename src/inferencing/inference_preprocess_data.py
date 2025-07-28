@@ -9,7 +9,7 @@ import pandas as pd
 def inference_preprocess_data() -> str:
     data_dir=os.path.join('data','raw')
     df=pd.read_csv(os.path.join(data_dir,'inference_test_data.csv'))
-    df.drop(columns=['Index','Bankrupt?'],inplace=True,errors=False)
+    df.drop(columns=['Index','Bankrupt?'],inplace=True)
     df.columns=df.columns.str.strip()
     output_dir = os.path.join('artifacts', 'inferencing')
     os.makedirs(output_dir, exist_ok=True)
@@ -22,7 +22,7 @@ def inference_preprocess_data() -> str:
 
     # Drop columns before PCA
     columns_to_drop = joblib.load(os.path.join(ARTIFACTS_DIR, 'preprocessing', 'columns_to_drop_before_pca.pkl'))
-    df.drop(columns=columns_to_drop, inplace=True, errors='ignore')
+    df.drop(columns=columns_to_drop, inplace=True)
 
     # Load PCA components
     PCA_DIR = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'pca')
@@ -30,7 +30,7 @@ def inference_preprocess_data() -> str:
     pca_pairs_df = joblib.load(os.path.join(PCA_DIR, 'pca_pairs_used.pkl'))
     pca_models = joblib.load(os.path.join(PCA_DIR, 'fitted_pca_models.pkl'))
 
-    df.drop(columns=[col for col in dropped_cols if col in df.columns], inplace=True)
+    df.drop(columns=dropped_cols, inplace=True)
 
     new_cols = []
     for _, row in pca_pairs_df.iterrows():
@@ -57,7 +57,7 @@ def inference_preprocess_data() -> str:
 
     # Drop post-PCA noise features
     columns_to_drop_after_pca = joblib.load(os.path.join(PCA_DIR, 'columns_to_drop_after_pca.pkl'))
-    df.drop(columns=columns_to_drop_after_pca, inplace=True, errors='ignore')
+    df.drop(columns=columns_to_drop_after_pca, inplace=True)
 
     # Load adaptive transformers
     ADAPTIVE_TRANSFORM_DIR = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'transformed')
