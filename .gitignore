@@ -39,3 +39,4 @@ Thumbs.db
 *.cover
 htmlcov/
 pytest_cache/
+/artifacts
