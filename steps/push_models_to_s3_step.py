@@ -4,7 +4,7 @@ from zenml.steps import step
 
 from src.push_to_s3 import promote_models_to_s3
 
-@step(enable_cache=True)
+@step(enable_cache=False)
 def push_models_to_s3_step(local_classifier_path:str,local_regressor_paths:List[str])->None:
     logging.info("Starting the step for pushing models to s3...")
     try:
