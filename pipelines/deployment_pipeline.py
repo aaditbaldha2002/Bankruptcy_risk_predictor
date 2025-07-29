@@ -13,7 +13,7 @@ from steps.register_models_step import register_models_step
 from steps.train_classification_model_step import train_classification_model_step
 from steps.train_regressor_models_step import train_regressor_model_step
 
-@pipeline(enable_cache=True)
+@pipeline(enable_cache=False)
 def deployment_pipeline(train_data_path: str, test_data_path: str) -> None:
     """
     

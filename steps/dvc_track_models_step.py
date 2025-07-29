@@ -15,7 +15,7 @@ def run_cmd(command: str):
     print(result.stdout)
 
 
-@step
+@step(enable_cache=False)
 def dvc_track_models_step(
     artifact_classifier_model_uri: str,
     artifact_regressor_model_uris: List[str],

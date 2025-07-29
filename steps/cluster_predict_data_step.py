@@ -3,7 +3,7 @@ import os
 
 import joblib
 from zenml.steps import step
-
+import numpy as np
 from src.inferencing.cluster_predict_data import cluster_predict_data
 
 @step(enable_cache=True)

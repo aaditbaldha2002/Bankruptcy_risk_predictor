@@ -28,21 +28,29 @@ def cluster_0_preprocessing(data_path: str) -> str:
 
         # Standardize features (excluding last 2 cols and target)
         sc = StandardScaler()
-        features = dataset.iloc[:, :-2]
+        dataset.drop(columns=['Bankrupt?'],inplace=True)
+        features = dataset
         scaled_features = sc.fit_transform(features)
-        joblib.dump(sc,f'{output_dir}/standard_scaler.pkl')
+        joblib.dump(sc,os.path.join(output_dir,'standard_scaler.pkl'))
         dataset = pd.DataFrame(scaled_features, columns=features.columns)
 
         # Drop known redundant/irrelevant features
         cols_to_drop = [
-            'Cash/Total Assets', 'Total debt/Total net worth', 'Equity to Long-term Liability',
-            'Cash/Current Liability', 'Long-term Liability to Current Assets', 'Quick Ratio',
-            'Working capitcal Turnover Rate', 'Current Ratio', 'Quick Assets/Current Liability','Bankrupt?'
+            'Cash/Total Assets', 
+            'Total debt/Total net worth', 
+            'Equity to Long-term Liability',
+            'Cash/Current Liability', 
+            'Long-term Liability to Current Assets', 
+            'Quick Ratio',
+            'Working capitcal Turnover Rate', 
+            'Current Ratio', 
+            'Quick Assets/Current Liability',
         ]
-        joblib.dump(cols_to_drop,f'{output_dir}/cols_to_drop_before_pca.pkl')
+
+        dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
+        joblib.dump(cols_to_drop,os.path.join(output_dir,'cols_to_drop_before_pca.pkl'))
         pca_dir=os.path.join(output_dir,'pca')
         os.makedirs(pca_dir,exist_ok=True)
-        dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
 
         # Dimensionality reduction
         final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
@@ -58,7 +66,6 @@ def cluster_0_preprocessing(data_path: str) -> str:
         else:
             pca_pairs_df = pd.DataFrame(columns=["Feature_1", "Feature_2", "Correlation"])
 
-
         if os.path.isfile(output_dir):
             raise RuntimeError(f"Expected {output_dir} to be a directory, but it's a file. Please delete or rename it.")
         
@@ -72,9 +79,11 @@ def cluster_0_preprocessing(data_path: str) -> str:
         final_df[target_col] = bankrupt_
         final_df.to_csv(os.path.join(output_dir, 'processed_data.csv'), index=False)
 
-        for file in os.listdir(output_dir):
-            file_path = os.path.join(output_dir, file)
-            if os.path.isfile(file_path):
+        for root, dirs, files in os.walk(output_dir):
+            for d in dirs:
+                os.chmod(os.path.join(root, d), 0o777)
+            for f in files:
+                file_path = os.path.join(root, f)
                 os.chmod(file_path, 0o666)
 
         logger.info(f"Preprocessing completed and saved to: {output_dir}")

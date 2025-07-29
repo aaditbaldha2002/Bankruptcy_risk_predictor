@@ -4,7 +4,7 @@ from mlflow import MlflowClient
 from mlflow.exceptions import RestException
 from zenml.steps import step
 
-@step
+@step(enable_cache=False)
 def register_models_step(classifier_model_uri: str, regressor_model_uris: List[str], deployment_decision: bool) -> Tuple[str, List[str],str,List[str]]:
     if not deployment_decision:
         logging.error("The models cannot be deployed because the deployment decision is not made.")

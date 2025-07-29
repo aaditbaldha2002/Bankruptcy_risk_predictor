@@ -16,7 +16,7 @@ from src.evaluation.evaluate_models import evaluate_models
 logger = logging.getLogger(__name__)
 logger.setLevel(logging.INFO)
 
-@step(enable_cache=True)
+@step(enable_cache=False)
 def evaluation_step(
     data_path: str,
     classifier_model_uri: str,

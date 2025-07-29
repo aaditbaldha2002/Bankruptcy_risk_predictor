@@ -12,12 +12,12 @@ from steps.inference_preprocess_data_step import inference_preprocess_data_step
 from steps.predict_bankruptcy_step import predict_bankruptcy_step
 
 @pipeline(enable_cache=True)
-def inference_pipeline(data:List[float]) -> int:
+def inference_pipeline() -> int:
     logging.info("Starting the inference pipeline...")
     logging.info("Starting preprocessing of the input data...")
     
     try:
-        transformed_data_file_path=inference_preprocess_data_step(data)
+        transformed_data_file_path=inference_preprocess_data_step()
     except Exception as e:
         logging.error(f"error while doing step inference_preprocess_data_step step:{e}")
         raise e

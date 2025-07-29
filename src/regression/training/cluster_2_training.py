@@ -1,5 +1,6 @@
 import logging
 import os
+import joblib
 import pandas as pd
 import numpy as np
 import mlflow
@@ -61,6 +62,9 @@ def cluster_2_training(data_path: str) -> str:
         top_features = list(selected_features)
         X_train = X_train_full[top_features]
         X_test = X_test_full[top_features]
+
+        PREPROCESS_DIR=os.path.join('artifacts','cluster_2','preprocessing')
+        joblib.dump(top_features,os.path.join(PREPROCESS_DIR,'cols_to_drop_after_pca.pkl'))
 
         logger.info("Setting up stacking classifier pipeline with SMOTEENN...")
         rf_final = RandomForestClassifier(random_state=42)
