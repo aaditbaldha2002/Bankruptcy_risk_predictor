@@ -5,7 +5,7 @@ import joblib
 import pandas as pd
 import numpy as np
 
-def cluster_predict_data(data_path:str)->np.int32:
+def cluster_predict_data(data_path:str)->int:
     try:
         input_data=pd.read_csv(data_path)
         CLUSTERING_DIR=os.path.join('artifacts','clustering')
@@ -24,7 +24,7 @@ def cluster_predict_data(data_path:str)->np.int32:
         top_28_features=joblib.load(os.path.join(CLUSTERING_DIR,'top_28_features.pkl'))
         df=df[top_28_features]
         cluster_label=classifier_model.predict(df)
-        return cluster_label[0]
+        return int(cluster_label[0])
     except Exception as e:
         logging.error(f"Error occurred while predicting cluster of the input data:{e}")
         raise e
