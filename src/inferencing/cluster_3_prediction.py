@@ -30,4 +30,6 @@ def cluster_3_prediction(file_path)->int:
     cluster_3_model=joblib.load(os.path.join(MODEL_REGISTRY,'model.pkl'))
     final_prediction=cluster_3_model.predict(pca_transformed_data)
     
-    return final_prediction
+    logging.info(f"Final Prediction made by cluster 3 regressor: {final_prediction}")
+
+    return int(final_prediction[0])
