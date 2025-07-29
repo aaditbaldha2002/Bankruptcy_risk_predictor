@@ -19,7 +19,7 @@ def cluster_predict_data(data_path:str)->int:
         
         MODEL_REGISTRY_DIR=os.path.join('model_registry')
         CLASSIFIER_DIR=os.path.join(MODEL_REGISTRY_DIR,'latest_models','classifier')
-        classifier_model=joblib.load(os.path.join(CLASSIFIER_DIR,'classifier_model.pkl'))
+        classifier_model=joblib.load(os.path.join(CLASSIFIER_DIR,'model.pkl'))
         
         top_28_features=joblib.load(os.path.join(CLUSTERING_DIR,'classifier_top_28_features.pkl'))
         df=df[top_28_features]

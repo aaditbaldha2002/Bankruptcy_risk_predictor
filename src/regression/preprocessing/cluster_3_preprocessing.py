@@ -25,10 +25,10 @@ def cluster_3_preprocessing(data_path:str)->str:
                                   'Cash/Current Liability',
                                   ]
     
-    joblib.dump(sc,os.path.join(output_dir,'cluster_3_standard_scaler.pkl'))
     joblib.dump(columns_to_drop,os.path.join(output_dir,'cluster_3_cols_to_drop_before_pca.pkl'))
     dataset=dataset.drop(columns=columns_to_drop+['Bankrupt?'])
     dataset=pd.DataFrame(sc.fit_transform(dataset),columns=dataset.columns)
+    joblib.dump(sc,os.path.join(output_dir,'cluster_3_standard_scaler.pkl'))
 
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
         dataset,
