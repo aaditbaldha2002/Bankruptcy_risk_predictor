@@ -46,7 +46,7 @@ def train_classification_model(data_path: str) -> str:
         top_n = 28
         top_features = feature_importances.sort_values(ascending=False).head(top_n).index.tolist()
         CLUSTERING_DIR=os.path.join('artifacts','clustering')
-        joblib.dump(top_features,os.path.join(CLUSTERING_DIR,'top_28_features.pkl'))
+        joblib.dump(top_features,os.path.join(CLUSTERING_DIR,'classifier_top_28_features.pkl'))
 
         top_df = df[top_features + ['Cluster']]
         X = top_df.drop(columns=['Cluster'])

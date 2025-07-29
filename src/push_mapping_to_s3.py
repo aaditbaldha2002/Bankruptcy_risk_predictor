@@ -7,8 +7,6 @@ import json
 DVC_CACHE_DIR = os.path.join(".dvc","cache","files","md5")
 ARTIFACT_DVC_PATH = "artifacts.dvc"
 S3_BUCKET = os.environ.get("S3_BUCKET_NAME")
-print(os.environ)
-print("S3_BUCKET:",S3_BUCKET)
 
 def load_dir_hash_from_dvc_file(dvc_file_path):
     import yaml
@@ -44,5 +42,3 @@ mapping = build_s3_mapping(dir_listing, S3_BUCKET)
 # Output the result
 with open("dvc_artifact_manifest.json", "w") as f:
     json.dump(mapping, f, indent=2)
-
-print(json.dumps(mapping, indent=2))

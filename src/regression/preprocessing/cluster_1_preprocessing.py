@@ -17,7 +17,7 @@ def cluster_1_preprocessing(data_path:str)->str:
     bankrupt_=dataset['Bankrupt?']
     dataset.drop(columns=['Bankrupt?'],inplace=True)
     dataset=pd.DataFrame(sc.fit_transform(dataset),columns=dataset.columns)
-    joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
+    joblib.dump(sc,os.path.join(output_dir,'cluster_1_standard_scaler.pkl'))
     dataset['Bankrupt?']=bankrupt_
 
     columns_to_drop=[
@@ -27,7 +27,7 @@ def cluster_1_preprocessing(data_path:str)->str:
     'Interest Expense Ratio'
     ]
     dataset=dataset.drop(columns=columns_to_drop)
-    joblib.dump(columns_to_drop,os.path.join(output_dir,'columns_to_drop.pkl'))
+    joblib.dump(columns_to_drop,os.path.join(output_dir,'cluster_1_columns_to_drop.pkl'))
 
     dataset.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
 

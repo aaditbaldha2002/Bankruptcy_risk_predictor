@@ -31,7 +31,7 @@ def cluster_0_preprocessing(data_path: str) -> str:
         dataset.drop(columns=['Bankrupt?'],inplace=True)
         features = dataset
         scaled_features = sc.fit_transform(features)
-        joblib.dump(sc,os.path.join(output_dir,'standard_scaler.pkl'))
+        joblib.dump(sc,os.path.join(output_dir,'cluster_0_standard_scaler.pkl'))
         dataset = pd.DataFrame(scaled_features, columns=features.columns)
 
         # Drop known redundant/irrelevant features
@@ -48,7 +48,7 @@ def cluster_0_preprocessing(data_path: str) -> str:
         ]
 
         dataset.drop(columns=[col for col in cols_to_drop if col in dataset.columns], inplace=True)
-        joblib.dump(cols_to_drop,os.path.join(output_dir,'cols_to_drop_before_pca.pkl'))
+        joblib.dump(cols_to_drop,os.path.join(output_dir,'cluster_0_cols_to_drop_before_pca.pkl'))
         pca_dir=os.path.join(output_dir,'pca')
         os.makedirs(pca_dir,exist_ok=True)
 
@@ -71,9 +71,9 @@ def cluster_0_preprocessing(data_path: str) -> str:
         
 
         # Persist artifacts
-        joblib.dump(dropped_cols, os.path.join(pca_dir, 'columns_to_drop.pkl'))
-        joblib.dump(pca_pairs_df, os.path.join(pca_dir, 'pca_pairs_used.pkl'))
-        joblib.dump(pca_models, os.path.join(pca_dir, 'fitted_pca_models.pkl'))
+        joblib.dump(dropped_cols, os.path.join(pca_dir, 'cluster_0_columns_to_drop.pkl'))
+        joblib.dump(pca_pairs_df, os.path.join(pca_dir, 'cluster_0_pca_pairs_used.pkl'))
+        joblib.dump(pca_models, os.path.join(pca_dir, 'cluster_0_fitted_pca_models.pkl'))
 
         # Append target back
         final_df[target_col] = bankrupt_

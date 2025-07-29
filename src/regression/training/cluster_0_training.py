@@ -119,7 +119,7 @@ def cluster_0_training(data_path: str) -> str:
             MODEL_DIR=os.path.join(ARTIFACTS_DIR,'cluster_0','model')
             os.makedirs(MODEL_DIR,exist_ok=True)
 
-            joblib.dump(best_threshold,os.path.join(MODEL_DIR,'model_threshold.pkl'))
+            joblib.dump(best_threshold,os.path.join(MODEL_DIR,'cluster_0_model_threshold.pkl'))
 
             model_name='cluster_0_regression_model'
             logger.info("Logging model artifact to MLflow...")
