@@ -25,8 +25,8 @@ def cluster_2_prediction(file_path:str)->int:
     pca_input_data=pca_input_data.drop(columns=dropped_cols)
     pca_transformed_input_data=inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
     cols_to_drop_after_pca=joblib.load(os.path.join(PREPROCESS_DIR,'cols_to_drop_after_pca.pkl'))
-    pca_transformed_input_data.drop(columns=cols_to_drop_after_pca,inplace=True)
+    pca_transformed_input_data=pca_transformed_input_data[cols_to_drop_after_pca]
     cluster_2_model=joblib.load(os.path.join(MODEL_REGISTRY,'model.pkl'))
     final_prediction=cluster_2_model.predict(pca_transformed_input_data)
-    
-    return final_prediction
+    logging.info(f"Final prediction done by cluster 2 regressor:{final_prediction}")
+    return int(final_prediction[0])

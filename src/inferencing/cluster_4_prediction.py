@@ -8,7 +8,7 @@ from src.inferencing.inference_pca_transform import inference_pca_transform
 from src.inferencing.predict_on_cluster_label import register_inferrer
 
 @register_inferrer(4)
-def cluster_4_prediction(file_path:str)->np.int32:
+def cluster_4_prediction(file_path:str)->int:
     ARTIFACTS_DIR=os.path.join('artifacts','cluster_4')
     PREPROCESS_DIR=os.path.join(ARTIFACTS_DIR,'preprocessing')
     PCA_DIR=os.path.join(PREPROCESS_DIR,'pca')
@@ -27,4 +27,4 @@ def cluster_4_prediction(file_path:str)->np.int32:
     cluster_4_model=joblib.load(os.path.join(MODEL_REGISTRY,'model.pkl'))
     final_prediction=cluster_4_model.predict(pca_transformed_data)
 
-    return final_prediction[0]
+    return int(final_prediction[0])
