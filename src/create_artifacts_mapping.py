@@ -3,6 +3,7 @@ load_dotenv()
 
 import os
 import json
+import boto3
 
 DVC_CACHE_DIR = os.path.join(".dvc","cache","files","md5")
 ARTIFACT_DVC_PATH = "artifacts.dvc"
@@ -25,7 +26,6 @@ def load_dir_object(dir_hash):
 
 def build_s3_mapping(dir_listing, s3_bucket):
     mapping = {}
-    print('dir_listing:',dir_listing)
     for entry in dir_listing:
         file_name = os.path.basename(entry["relpath"])
         file_hash = entry["md5"]
@@ -42,3 +42,15 @@ mapping = build_s3_mapping(dir_listing, S3_BUCKET)
 # Output the result
 with open("dvc_artifact_manifest.json", "w") as f:
     json.dump(mapping, f, indent=2)
+
+s3 = boto3.client('s3')
+
+# Define file and bucket details
+file_path = 'dvc_artifact_manifest.json'
+bucket_name = os.environ.get("S3_BUCKET_NAME").split('/')[2]
+s3_key = 'artifacts_mapping.json'
+
+# Upload the file
+s3.upload_file(file_path, bucket_name, s3_key)
+
+print("Upload successful")
