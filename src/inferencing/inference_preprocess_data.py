@@ -15,20 +15,20 @@ def inference_preprocess_data() -> str:
     os.makedirs(output_dir, exist_ok=True)
 
     ARTIFACTS_DIR = 'artifacts'
-    scaler_path = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'first_scaler.pkl')
+    scaler_path = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'preprocess_scaler.pkl')
     scaler = joblib.load(scaler_path)
 
     df = pd.DataFrame(scaler.transform(df), columns=df.columns)
 
     # Drop columns before PCA
-    columns_to_drop = joblib.load(os.path.join(ARTIFACTS_DIR, 'preprocessing', 'columns_to_drop_before_pca.pkl'))
+    columns_to_drop = joblib.load(os.path.join(ARTIFACTS_DIR, 'preprocessing', 'preprocess_columns_to_drop_before_pca.pkl'))
     df.drop(columns=columns_to_drop, inplace=True)
 
     # Load PCA components
     PCA_DIR = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'pca')
-    dropped_cols = joblib.load(os.path.join(PCA_DIR, 'columns_to_drop.pkl'))
-    pca_pairs_df = joblib.load(os.path.join(PCA_DIR, 'pca_pairs_used.pkl'))
-    pca_models = joblib.load(os.path.join(PCA_DIR, 'fitted_pca_models.pkl'))
+    dropped_cols = joblib.load(os.path.join(PCA_DIR, 'preprocess_columns_to_drop.pkl'))
+    pca_pairs_df = joblib.load(os.path.join(PCA_DIR, 'preprocess_pca_pairs_used.pkl'))
+    pca_models = joblib.load(os.path.join(PCA_DIR, 'preprocess_fitted_pca_models.pkl'))
 
     df.drop(columns=dropped_cols, inplace=True)
 
@@ -56,12 +56,12 @@ def inference_preprocess_data() -> str:
         new_cols.append(new_col)
 
     # Drop post-PCA noise features
-    columns_to_drop_after_pca = joblib.load(os.path.join(PCA_DIR, 'columns_to_drop_after_pca.pkl'))
+    columns_to_drop_after_pca = joblib.load(os.path.join(PCA_DIR, 'preprocess_columns_to_drop_after_pca.pkl'))
     df.drop(columns=columns_to_drop_after_pca, inplace=True)
 
     # Load adaptive transformers
     ADAPTIVE_TRANSFORM_DIR = os.path.join(ARTIFACTS_DIR, 'preprocessing', 'transformed')
-    transformers_path = os.path.join(ADAPTIVE_TRANSFORM_DIR, 'adaptive_transformers.pkl')
+    transformers_path = os.path.join(ADAPTIVE_TRANSFORM_DIR, 'preprocess_adaptive_transformers.pkl')
     try:
         transformers = joblib.load(transformers_path)
         logging.info(f"Loaded adaptive transformers from {transformers_path}")
@@ -87,7 +87,7 @@ def inference_preprocess_data() -> str:
 
     transformed_df = pd.DataFrame(transformed_data)
 
-    transformed_data_csv_path = os.path.join(output_dir, 'transformed_input_data.csv')
+    transformed_data_csv_path = os.path.join(output_dir, 'preprocess_transformed_input_data.csv')
     transformed_df.to_csv(transformed_data_csv_path, index=False)
 
     return transformed_data_csv_path

@@ -15,16 +15,16 @@ def cluster_0_prediction(file_path:str)->int:
     MODEL_DIR=os.path.join(ARTIFACTS_DIR,'model')
 
     input_data=pd.read_csv(file_path)
-    scaler=joblib.load(os.path.join(PREPROCESS_DIR,'standard_scaler.pkl'))
+    scaler=joblib.load(os.path.join(PREPROCESS_DIR,'cluster_0_standard_scaler.pkl'))
     transformed_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
 
-    cols_to_drop=joblib.load(os.path.join(PREPROCESS_DIR,'cols_to_drop_before_pca.pkl'))
+    cols_to_drop=joblib.load(os.path.join(PREPROCESS_DIR,'cluster_0_cols_to_drop_before_pca.pkl'))
     pca_input_data=transformed_input_data.drop(columns=cols_to_drop)
 
-    dropped_cols=joblib.load(os.path.join(PCA_DIR,'columns_to_drop.pkl'))
-    pca_pairs_df=joblib.load(os.path.join(PCA_DIR,'pca_pairs_used.pkl'))
-    pca_models=joblib.load(os.path.join(PCA_DIR,'fitted_pca_models.pkl'))
-    best_threshold=joblib.load(os.path.join(MODEL_DIR,'model_threshold.pkl'))
+    dropped_cols=joblib.load(os.path.join(PCA_DIR,'cluster_0_columns_to_drop.pkl'))
+    pca_pairs_df=joblib.load(os.path.join(PCA_DIR,'cluster_0_pca_pairs_used.pkl'))
+    pca_models=joblib.load(os.path.join(PCA_DIR,'cluster_0_fitted_pca_models.pkl'))
+    best_threshold=joblib.load(os.path.join(MODEL_DIR,'cluster_0_model_threshold.pkl'))
 
     pca_input_data=pca_input_data.drop(columns=dropped_cols)
     pca_transformed_data=inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)

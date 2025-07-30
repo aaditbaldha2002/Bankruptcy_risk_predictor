@@ -64,7 +64,7 @@ def cluster_2_training(data_path: str) -> str:
         X_test = X_test_full[top_features]
 
         PREPROCESS_DIR=os.path.join('artifacts','cluster_2','preprocessing')
-        joblib.dump(top_features,os.path.join(PREPROCESS_DIR,'cols_to_drop_after_pca.pkl'))
+        joblib.dump(top_features,os.path.join(PREPROCESS_DIR,'cluster_2_cols_to_retain_after_pca.pkl'))
 
         logger.info("Setting up stacking classifier pipeline with SMOTEENN...")
         rf_final = RandomForestClassifier(random_state=42)

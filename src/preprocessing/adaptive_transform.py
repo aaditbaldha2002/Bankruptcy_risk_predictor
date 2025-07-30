@@ -57,8 +57,8 @@ def adaptive_transform(data_path: str) -> str:
     output_dir = 'artifacts/preprocessing/transformed'
     os.makedirs(output_dir, exist_ok=True)
 
-    transformed_file_path = os.path.join(output_dir, 'train_ada_transformed.csv')
-    transformers_file_path = os.path.join(output_dir,'adaptive_transformers.pkl')
+    transformed_file_path = os.path.join(output_dir, 'preprocess_train_ada_transformed.csv')
+    transformers_file_path = os.path.join(output_dir,'preprocess_adaptive_transformers.pkl')
 
     try:
         joblib.dump(transformers, transformers_file_path)

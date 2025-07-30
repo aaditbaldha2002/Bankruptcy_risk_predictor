@@ -18,7 +18,7 @@ def cluster_2_preprocessing(data_path:str)->str:
     bankrupt_=dataset['Bankrupt?']
     dataset.drop(columns=['Bankrupt?'],inplace=True)
     dataset=pd.DataFrame(sc.fit_transform(dataset),columns=dataset.columns)
-    joblib.dump(sc,os.path.join(output_dir,'scaler.pkl'))
+    joblib.dump(sc,os.path.join(output_dir,'cluster_2_standard_scaler.pkl'))
 
     dataset['Bankrupt?']=bankrupt_
 
@@ -31,7 +31,7 @@ def cluster_2_preprocessing(data_path:str)->str:
                                     ]
 
     dataset=dataset.drop(columns=columns_to_drop+['Bankrupt?'])
-    joblib.dump(columns_to_drop,os.path.join(output_dir,'columns_to_drop.pkl'))
+    joblib.dump(columns_to_drop,os.path.join(output_dir,'cluster_2_columns_to_drop.pkl'))
 
     final_df, pca_features, dropped_cols, all_pca_pairs, pca_models = hybrid_iterative_reduction(
         dataset,
@@ -50,9 +50,9 @@ def cluster_2_preprocessing(data_path:str)->str:
     final_df.to_csv(os.path.join(output_dir,'processed_data.csv'),index=False)
     pca_dir=os.path.join(output_dir,'pca')
     os.makedirs(pca_dir,exist_ok=True)
-    joblib.dump(dropped_cols,os.path.join(pca_dir,'columns_to_drop.pkl'))
-    joblib.dump(pca_pairs_df,os.path.join(pca_dir,'pca_pairs_used.pkl'))
-    joblib.dump(pca_models,os.path.join(pca_dir,'fitted_pca_models.pkl'))
+    joblib.dump(dropped_cols,os.path.join(pca_dir,'cluster_2_columns_to_drop.pkl'))
+    joblib.dump(pca_pairs_df,os.path.join(pca_dir,'cluster_2_pca_pairs_used.pkl'))
+    joblib.dump(pca_models,os.path.join(pca_dir,'cluster_2_fitted_pca_models.pkl'))
 
     for root, dirs, files in os.walk(output_dir):
         for d in dirs:
