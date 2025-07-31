@@ -1,13 +1,13 @@
 from fastapi import FastAPI, HTTPException
 import logging
-from src.apis.predict.load_model import load_model
 from src.apis.predict.make_prediction import make_prediction
 from src.apis.predict.schemas import BankruptcyPredictionInput, BankruptcyPredictionResponse
+from mangum import Mangum
 
-app=FASTAPI()
-handler=Magnum(app)
+app=FastAPI()
+handler=Mangum(app)
 
-@app.post("/predict",tags=['Prediction'])
+@app.post("/predict",tags=['Prediction'],response_model=BankruptcyPredictionResponse)
 def predict(payload: BankruptcyPredictionInput):
     try:
         # Convert input data to model features array
