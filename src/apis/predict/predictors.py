@@ -107,3 +107,38 @@ def api_cluster_2_prediction(df:pd.DataFrame)->int:
     except Exception as e:
         logging.error(f"Error occurred in the api_cluster_2_prediction function:{e}")
         raise e
+    
+@api_register_inferrer(3)
+def api_cluster_3_prediction(df:pd.DataFrame)->int:
+    try:
+        logging.info("Starting the api_cluster_3_prediction function...")
+        s3=boto3.client('s3')
+        MODEL_BUCKET=S3_BUCKET_NAME[:-9]
+
+        scaler_hash=parse_artifact_mapping('cluster_3_standard_scaler.pkl')
+        scaler=s3.get_object(Bucket=S3_BUCKET_NAME,Key=scaler_hash)
+        cols_to_drop_before_pca_hash=parse_artifact_mapping('cluster_3_cols_to_drop_before_pca.pkl')
+        cols_to_drop_before_pca=s3.get_object(Bucket=S3_BUCKET_NAME,Key=cols_to_drop_before_pca_hash)
+        dropped_cols_hash=parse_artifact_mapping('cluster_3_columns_to_drop.pkl')
+        dropped_cols=s3.get_object(Bucket=S3_BUCKET_NAME,Key=dropped_cols_hash)
+        pca_pairs_df_hash=parse_artifact_mapping('cluster_3_pca_pairs_used.pkl')
+        pca_pairs_df=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_pairs_df_hash)
+        pca_models_hash=parse_artifact_mapping('cluster_3_fitted_pca_models.pkl')
+        pca_models=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_models_hash)
+        cluster_3_model_path=parse_model_paths('cluster_3_regressor')
+        cluster_3_model=s3.get_object(Bucket=MODEL_BUCKET,Key=cluster_3_model_path)
+
+        input_data=df
+        input_data=input_data.drop(columns=cols_to_drop_before_pca)
+        scaled_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
+
+        pca_input_data=scaled_input_data.drop(columns=dropped_cols)
+        pca_transformed_data=api_inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
+        
+        final_prediction=cluster_3_model.predict(pca_transformed_data)
+        
+        logging.info(f"Final Prediction made by cluster 3 regressor: {final_prediction}")
+
+        return int(final_prediction[0])
+    except Exception as e:
+        logging.info(f"Error occurred in the api_cluster_3_prediction function:{e}")
