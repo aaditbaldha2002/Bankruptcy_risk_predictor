@@ -142,3 +142,37 @@ def api_cluster_3_prediction(df:pd.DataFrame)->int:
         return int(final_prediction[0])
     except Exception as e:
         logging.info(f"Error occurred in the api_cluster_3_prediction function:{e}")
+
+@api_register_inferrer(4)
+def api_cluster_4_prediction(df:pd.DataFrame)->int:
+    try:
+        logging.info("Starting the function api_cluster_4_prediction...")
+        s3=boto3.client('s3')
+        MODEL_BUCKET=S3_BUCKET_NAME[:-9]
+        ARTIFACTS_DIR=os.path.join('artifacts','cluster_4')
+        PREPROCESS_DIR=os.path.join(ARTIFACTS_DIR,'preprocessing')
+        PCA_DIR=os.path.join(PREPROCESS_DIR,'pca')
+        MODEL_REGISTRY=os.path.join('model_registry','latest_models','cluster_4_regressor')
+
+        input_data = df
+        scaler_hash=parse_artifact_mapping('cluster_4_standard_scaler.pkl')
+        scaler=s3.get_object(Bucket=S3_BUCKET_NAME,Key=scaler_hash)
+        dropped_cols_hash=parse_artifact_mapping('cluster_4_columns_to_drop.pkl')
+        dropped_cols=s3.get_object(Bucket=S3_BUCKET_NAME,Key=dropped_cols_hash)
+        pca_pairs_df_hash=parse_artifact_mapping('cluster_4_pca_pairs_used.pkl')
+        pca_pairs_df=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_pairs_df_hash)
+        pca_models_hash=parse_artifact_mapping('cluster_4_fitted_pca_models.pkl')
+        pca_models=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_models_hash)
+        cluster_4_model_path=parse_model_paths('cluster_4_regressor')
+        cluster_4_model=s3.get_object(Bucket=MODEL_BUCKET,Key=cluster_4_model_path)
+
+        scaled_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
+        pca_input_data=scaled_input_data.drop(columns=dropped_cols)
+        pca_transformed_data=api_inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
+        
+        final_prediction=cluster_4_model.predict(pca_transformed_data)
+        logging.info("Final prediction by the cluster 4 regressor:{final_prediction}")
+        return int(final_prediction[0])
+    except Exception as e:
+        logging.error(f"Error in function api_cluster_4_prediction:{e}")
+        raise e
