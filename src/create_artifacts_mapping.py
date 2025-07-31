@@ -30,7 +30,7 @@ def build_s3_mapping(dir_listing, s3_bucket):
         file_name = os.path.basename(entry["relpath"])
         file_hash = entry["md5"]
         s3_key=f"{file_hash[:2]}/{file_hash[2:]}"
-        s3_url = f"files/md5/{s3_key}"
+        s3_url = f"dvc-store/files/md5/{s3_key}"
         mapping[file_name] = s3_url
     return mapping
 

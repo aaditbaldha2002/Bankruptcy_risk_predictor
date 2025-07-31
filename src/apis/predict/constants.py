@@ -1,6 +1,9 @@
 import os
 from typing import Callable
 
+from dotenv import load_dotenv
+load_dotenv()
+
 S3_BUCKET_NAME=os.environ.get('S3_BUCKET_NAME')
 INFERENCE_REGISTRY: dict[int, Callable[[str], int]] = {}
 MODEL_PATHS = {
