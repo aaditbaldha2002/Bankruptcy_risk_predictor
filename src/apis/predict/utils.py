@@ -131,7 +131,7 @@ def api_cluster_predict_data(df:pd.DataFrame)->int:
         raise e
 
 def api_register_inferrer(cluster_id: int):
-    def decorator(func: Callable[[str], int]):
+    def decorator(func: Callable[[pd.DataFrame], int]):
         INFERENCE_REGISTRY[cluster_id] = func
         return func
     return decorator

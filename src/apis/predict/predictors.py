@@ -46,3 +46,64 @@ def api_cluster_0_prediction(df:pd.DataFrame)->int:
         return final_prediction
     except Exception as e:
         logging.error(f"Error occured in the api_cluster_0_prediction function:{e}")
+
+@api_register_inferrer(1)
+def api_cluster_1_prediction(df:pd.DataFrame)->int:
+    try:
+        logging.info("Starting the api_cluster_1_prediction function...")
+        s3=boto3.client('s3')
+
+        scaler_hash=parse_artifact_mapping('cluster_1_standard_scaler.pkl')
+        scaler=s3.get_object(Bucket=S3_BUCKET_NAME,Key=scaler_hash)
+        cols_to_drop_hash=parse_artifact_mapping('cluster_1_columns_to_drop.pkl')
+        cols_to_drop=s3.get_object(Bucket=S3_BUCKET_NAME,Key=cols_to_drop_hash)
+
+        input_data=df
+        transformed_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
+
+        final_input_data=transformed_input_data.drop(columns=cols_to_drop)
+
+        MODEL_BUCKET=S3_BUCKET_NAME[:-9]
+        cluster_1_model_path=parse_model_paths('cluster_1_regressor')
+        cluster_1_model=s3.get_object(Bucket=MODEL_BUCKET,Key=cluster_1_model_path)
+
+        final_prediction=cluster_1_model.predict(final_input_data)
+        logging.info(f"Final prediction by cluster 1 regressor:{final_prediction}")
+        return int(final_prediction[0])
+    except Exception as e:
+        logging.info(f"Error occurred in function api_cluster_1_prediction function:{e}")
+
+@api_register_inferrer(2)
+def api_cluster_2_prediction(df:pd.DataFrame)->int:
+    try:
+        logging.info("Starting the api_cluster_2_prediction function...")
+        s3=boto3.client('s3')
+        MODEL_BUCKET=S3_BUCKET_NAME[:-9]
+
+        scaler_hash=parse_artifact_mapping('cluster_2_standard_scaler.pkl')
+        scaler=s3.get_object(Bucket=S3_BUCKET_NAME,Key=scaler_hash)
+        cols_to_drop_before_pca_hash=parse_artifact_mapping('cluster_2_columns_to_drop.pkl')
+        cols_to_drop_before_pca=s3.get_object(Bucket=S3_BUCKET_NAME,Key=cols_to_drop_before_pca_hash)
+        dropped_cols_hash=parse_artifact_mapping('cluster_2_columns_to_drop.pkl')
+        dropped_cols=s3.get_object(Bucket=S3_BUCKET_NAME,Key=dropped_cols_hash)
+        pca_pairs_df_hash=parse_artifact_mapping('cluster_2_pca_pairs_used.pkl')
+        pca_pairs_df=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_pairs_df_hash)
+        pca_models_hash=parse_artifact_mapping('cluster_2_fitted_pca_models.pkl')
+        pca_models=s3.get_object(Bucket=S3_BUCKET_NAME,Key=pca_models_hash)
+        cluster_2_model_path=parse_model_paths('cluster_2_regressor')
+        cluster_2_model=s3.get_object(Bucket=MODEL_BUCKET,Key=cluster_2_model_path)
+        cols_to_retain_after_pca_hash=parse_artifact_mapping('cluster_2_cols_to_retain_after_pca.pkl')
+        cols_to_retain_after_pca=s3.get_object(Bucket=S3_BUCKET_NAME,Key=cols_to_retain_after_pca_hash)
+        input_data = df
+
+        scaled_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
+        pca_input_data=scaled_input_data.drop(columns=cols_to_drop_before_pca)
+        pca_input_data=pca_input_data.drop(columns=dropped_cols)
+        pca_transformed_input_data=api_inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
+        pca_transformed_input_data=pca_transformed_input_data[cols_to_retain_after_pca]
+        final_prediction=cluster_2_model.predict(pca_transformed_input_data)
+        logging.info(f"Final prediction done by cluster 2 regressor:{final_prediction}")
+        return int(final_prediction[0])
+    except Exception as e:
+        logging.error(f"Error occurred in the api_cluster_2_prediction function:{e}")
+        raise e
