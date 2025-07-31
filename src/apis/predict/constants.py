@@ -1,5 +1,8 @@
 import os
+from typing import Callable
+
 S3_BUCKET_NAME=os.environ.get('S3_BUCKET_NAME')
+INFERENCE_REGISTRY: dict[int, Callable[[str], int]] = {}
 MODEL_PATHS = {
     "classifier": "prod-models/classifier/model.pkl",
     "cluster_0_regressor": "prod-models/cluster_0_regressor/model.pkl",

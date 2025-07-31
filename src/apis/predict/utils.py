@@ -1,3 +1,4 @@
+from typing import Callable
 import pandas as pd
 import os
 import joblib
@@ -6,7 +7,7 @@ import logging
 import json
 import boto3
 import numpy as np
-from src.apis.predict.constants import MODEL_PATHS, S3_BUCKET_NAME
+from src.apis.predict.constants import INFERENCE_REGISTRY, MODEL_PATHS, S3_BUCKET_NAME
 
 def parse_artifact_mapping(required_file_name:str)->str:
     hashMap=json.load('dvc_artifact_manifest.json')
@@ -128,8 +129,47 @@ def api_cluster_predict_data(df:pd.DataFrame)->int:
     except Exception as e:
         logging.error(f"Error occurred while predicting cluster of the input data:{e}")
         raise e
+
+def api_register_inferrer(cluster_id: int):
+    def decorator(func: Callable[[str], int]):
+        INFERENCE_REGISTRY[cluster_id] = func
+        return func
+    return decorator
+
+def api_predict_on_cluster_label(df:pd.DataFrame,cluster_label:int)->int:
+    try:
+        logging.info("Prediction based on cluster label predicted earlier started...")
+        if cluster_label not in INFERENCE_REGISTRY:
+            raise ValueError(f"No inferrer registered for cluster {cluster_label}")
+        logging.info(f"🧠 Inferencing model for cluster {cluster_label} using provided dataframe")
+        logging.info("Final prediction completed.")
+        return INFERENCE_REGISTRY[cluster_label](df)
     
+    except Exception as e:
+        logging.error(f"Error occurred in the api_predict_on_cluster_label function:{e}")
+        raise e
 
+def api_inference_pca_transform(pca_pairs_df:pd.DataFrame,df:pd.DataFrame,pca_models)->pd.DataFrame:
+    new_cols=[]
+    for _, row in pca_pairs_df.iterrows():
+        f1, f2 = row['Feature_1'], row['Feature_2']
+        if f1 not in df.columns or f2 not in df.columns:
+            continue
 
+        subset = df[[f1, f2]].dropna()
+        if subset.empty:
+            continue
 
+        data = subset.values - subset.values.mean(axis=0)
+        key = f"{sorted([f1, f2])[0]}__{sorted([f1, f2])[1]}"
+        pca = pca_models.get(key)
 
+        if pca is None:
+            continue
+
+        new_col = f"PCA_{f1}_{f2}"
+        df[new_col] = np.nan
+        df.loc[subset.index, new_col] = pca.transform(data).flatten()
+        df.drop(columns=[f1, f2], inplace=True)
+        new_cols.append(new_col)
+    return df
