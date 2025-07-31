@@ -149,6 +149,8 @@ def api_cluster_predict_data(df:pd.DataFrame)->int:
         logging.error(f"Error occurred while predicting cluster of the input data:{e}")
         raise e
 
+
+
 def api_register_inferrer(cluster_id: int):
     def decorator(func: Callable[[pd.DataFrame], int]):
         INFERENCE_REGISTRY[cluster_id] = func
@@ -192,3 +194,9 @@ def api_inference_pca_transform(pca_pairs_df:pd.DataFrame,df:pd.DataFrame,pca_mo
         df.drop(columns=[f1, f2], inplace=True)
         new_cols.append(new_col)
     return df
+
+from src.apis.predict.predictors import api_cluster_0_prediction
+from src.apis.predict.predictors import api_cluster_1_prediction
+from src.apis.predict.predictors import api_cluster_2_prediction
+from src.apis.predict.predictors import api_cluster_3_prediction
+from src.apis.predict.predictors import api_cluster_4_prediction
