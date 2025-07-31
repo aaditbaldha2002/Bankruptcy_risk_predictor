@@ -1,5 +1,8 @@
 from pydantic import BaseModel
 
+class BankruptcyPredictionResponse(BaseModel):
+    prediction:int
+
 class BankruptcyPredictionInput(BaseModel):
     roa_c_before_interest_and_depreciation_before_interest: float
     roa_a_before_interest_and_after_tax: float
