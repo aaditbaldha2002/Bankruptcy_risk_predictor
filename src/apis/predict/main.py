@@ -8,7 +8,6 @@ from src.apis.predict.schemas import BankruptcyPredictionInput, BankruptcyPredic
 from mangum import Mangum
 
 app=FastAPI()
-handler=Mangum(app)
 
 @app.post("/predict",tags=['Prediction'],response_model=BankruptcyPredictionResponse)
 def predict(payload: BankruptcyPredictionInput):
