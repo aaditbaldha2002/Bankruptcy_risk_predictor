@@ -15,28 +15,28 @@ def api_cluster_0_prediction(df:pd.DataFrame)->int:
 
         input_data=df
         scaler_hash=parse_artifact_mapping('cluster_0_standard_scaler.pkl')
-        scaler=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=scaler_hash)
+        scaler=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=scaler_hash)
 
         transformed_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
 
         cols_to_drop_hash=parse_artifact_mapping('cluster_0_cols_to_drop_before_pca.pkl')
-        cols_to_drop=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=cols_to_drop_hash)
+        cols_to_drop=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=cols_to_drop_hash)
         pca_input_data=transformed_input_data.drop(columns=cols_to_drop)
 
         dropped_cols_hash=parse_artifact_mapping('cluster_0_columns_to_drop.pkl')
-        dropped_cols=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=dropped_cols_hash)
+        dropped_cols=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=dropped_cols_hash)
         pca_pairs_df_hash=parse_artifact_mapping('cluster_0_pca_pairs_used.pkl')
-        pca_pairs_df=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=pca_pairs_df_hash)
+        pca_pairs_df=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=pca_pairs_df_hash)
         pca_models_hash=parse_artifact_mapping('cluster_0_fitted_pca_models.pkl')
-        pca_models=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=pca_models_hash)
+        pca_models=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=pca_models_hash)
         best_threshold_hash=parse_artifact_mapping('cluster_0_model_threshold.pkl')
-        best_threshold=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],key=best_threshold_hash)
+        best_threshold=load_pickle_from_s3(Bucket=S3_BUCKET_NAME.split('/')[2],Key=best_threshold_hash)
 
         pca_input_data=pca_input_data.drop(columns=dropped_cols)
         pca_transformed_data=api_inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
         
         cluster_0_model_path=parse_model_paths('cluster_0_regressor')
-        cluster_0_model=load_pickle_from_s3(Bucket=MODEL_OBJECT,key=cluster_0_model_path)
+        cluster_0_model=load_pickle_from_s3(Bucket=MODEL_OBJECT,Key=cluster_0_model_path)
         final_prediction=cluster_0_model.predict(pca_transformed_data)
         if final_prediction < best_threshold:
             final_prediction=0
@@ -98,7 +98,7 @@ def api_cluster_2_prediction(df:pd.DataFrame)->int:
 
         scaled_input_data=pd.DataFrame(scaler.transform(input_data),columns=input_data.columns)
         pca_input_data=scaled_input_data.drop(columns=cols_to_drop_before_pca)
-        pca_input_data=pca_input_data.drop(columns=dropped_cols)
+        pca_input_data=pca_input_data.drop(columns=dropped_cols,errors='ignore')
         pca_transformed_input_data=api_inference_pca_transform(pca_pairs_df,pca_input_data,pca_models)
         pca_transformed_input_data=pca_transformed_input_data[cols_to_retain_after_pca]
         final_prediction=cluster_2_model.predict(pca_transformed_input_data)

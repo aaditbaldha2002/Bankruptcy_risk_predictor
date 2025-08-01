@@ -9,9 +9,7 @@ def make_prediction(payload:BankruptcyPredictionInput):
     try:
         data_dict=payload.dict()
         ordered_data = {col: data_dict.get(col, 0) for col in FEATURE_NAMES}
-        print("ordered_data:",ordered_data)
         df = pd.DataFrame([ordered_data])
-        print("ordered_df:",df)
         processed_df=inference_api_preprocess_data(df)
         cluster_label=api_cluster_predict_data(processed_df)
         final_prediction=api_predict_on_cluster_label(processed_df,cluster_label)
