@@ -1,101 +1,109 @@
-from pydantic import BaseModel
+import math
+from pydantic import BaseModel, Field, field_validator
 
 class BankruptcyPredictionResponse(BaseModel):
-    prediction:int
+    prediction: int
 
 class BankruptcyPredictionInput(BaseModel):
-    roa_c_before_interest_and_depreciation_before_interest: float
-    roa_a_before_interest_and_after_tax: float
-    roa_b_before_interest_and_depreciation_after_tax: float
-    operating_gross_margin: float
-    realized_sales_gross_margin: float
-    operating_profit_rate: float
-    pre_tax_net_interest_rate: float
-    after_tax_net_interest_rate: float
-    non_industry_income_and_expenditure_revenue: float
-    continuous_interest_rate_after_tax: float
-    operating_expense_rate: float
-    research_and_development_expense_rate: float
-    cash_flow_rate: float
-    interest_bearing_debt_interest_rate: float
-    tax_rate_a: float
-    net_value_per_share_b: float
-    net_value_per_share_a: float
-    net_value_per_share_c: float
-    persistent_eps_last_four_seasons: float
-    cash_flow_per_share: float
-    revenue_per_share: float
-    operating_profit_per_share: float
-    net_profit_before_tax_per_share: float
-    sales_gross_profit_growth_rate: float
-    operating_profit_growth_rate: float
-    after_tax_net_profit_growth_rate: float
-    regular_net_profit_growth_rate: float
-    continuous_net_profit_growth_rate: float
-    total_asset_growth_rate: float
-    net_value_growth_rate: float
-    total_asset_return_growth_ratio: float
-    cash_reinvestment: float
-    current_ratio: float
-    quick_ratio: float
-    interest_expense_ratio: float
-    total_debt_to_total_net_worth: float
-    debt_ratio: float
-    net_worth_to_assets: float
-    long_term_fund_suitability_ratio_a: float
-    borrowing_dependency: float
-    contingent_liabilities_to_net_worth: float
-    operating_profit_to_paid_in_capital: float
-    net_profit_before_tax_to_paid_in_capital: float
-    inventory_and_receivables_to_net_value: float
-    total_asset_turnover: float
-    accounts_receivable_turnover: float
-    average_collection_days: float
-    inventory_turnover_rate: float
-    fixed_assets_turnover_frequency: float
-    net_worth_turnover_rate: float
-    revenue_per_person: float
-    operating_profit_per_person: float
-    allocation_rate_per_person: float
-    working_capital_to_total_assets: float
-    quick_assets_to_total_assets: float
-    current_assets_to_total_assets: float
-    cash_to_total_assets: float
-    quick_assets_to_current_liability: float
-    cash_to_current_liability: float
-    current_liability_to_assets: float
-    operating_funds_to_liability: float
-    inventory_to_working_capital: float
-    inventory_to_current_liability: float
-    current_liabilities_to_liability: float
-    working_capital_to_equity: float
-    current_liabilities_to_equity: float
-    long_term_liability_to_current_assets: float
-    retained_earnings_to_total_assets: float
-    total_income_to_total_expense: float
-    total_expense_to_assets: float
-    current_asset_turnover_rate: float
-    quick_asset_turnover_rate: float
-    working_capital_turnover_rate: float
-    cash_turnover_rate: float
-    cash_flow_to_sales: float
-    fixed_assets_to_assets: float
-    current_liability_to_liability: float
-    current_liability_to_equity: float
-    equity_to_long_term_liability: float
-    cash_flow_to_total_assets: float
-    cash_flow_to_liability: float
-    cfo_to_assets: float
-    cash_flow_to_equity: float
-    current_liability_to_current_assets: float
-    liability_assets_flag: float
-    net_income_to_total_assets: float
-    total_assets_to_gnp_price: float
-    no_credit_interval: float
-    gross_profit_to_sales: float
-    net_income_to_stockholders_equity: float
-    liability_to_equity: float
-    degree_of_financial_leverage: float
-    interest_coverage_ratio: float
-    net_income_flag: float
-    equity_to_liability: float
+    roa_c_before_interest_and_depreciation_before_interest: float = Field(..., gt=-1e10, lt=1e10)
+    roa_a_before_interest_and_after_tax: float = Field(..., gt=-1e10, lt=1e10)
+    roa_b_before_interest_and_depreciation_after_tax: float = Field(..., gt=-1e10, lt=1e10)
+    operating_gross_margin: float = Field(..., gt=-1e10, lt=1e10)
+    realized_sales_gross_margin: float = Field(..., gt=-1e10, lt=1e10)
+    operating_profit_rate: float = Field(..., gt=-1e10, lt=1e10)
+    pre_tax_net_interest_rate: float = Field(..., gt=-1e10, lt=1e10)
+    after_tax_net_interest_rate: float = Field(..., gt=-1e10, lt=1e10)
+    non_industry_income_and_expenditure_revenue: float = Field(..., gt=-1e10, lt=1e10)
+    continuous_interest_rate_after_tax: float = Field(..., gt=-1e10, lt=1e10)
+    operating_expense_rate: float = Field(..., gt=-1e10, lt=1e10)
+    research_and_development_expense_rate: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_rate: float = Field(..., gt=-1e10, lt=1e10)
+    interest_bearing_debt_interest_rate: float = Field(..., gt=-1e10, lt=1e10)
+    tax_rate_a: float = Field(..., gt=-1e10, lt=1e10)
+    net_value_per_share_b: float = Field(..., gt=-1e10, lt=1e10)
+    net_value_per_share_a: float = Field(..., gt=-1e10, lt=1e10)
+    net_value_per_share_c: float = Field(..., gt=-1e10, lt=1e10)
+    persistent_eps_last_four_seasons: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_per_share: float = Field(..., gt=-1e10, lt=1e10)
+    revenue_per_share: float = Field(..., gt=-1e10, lt=1e10)
+    operating_profit_per_share: float = Field(..., gt=-1e10, lt=1e10)
+    net_profit_before_tax_per_share: float = Field(..., gt=-1e10, lt=1e10)
+    sales_gross_profit_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    operating_profit_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    after_tax_net_profit_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    regular_net_profit_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    continuous_net_profit_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    total_asset_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    net_value_growth_rate: float = Field(..., gt=-1e10, lt=1e10)
+    total_asset_return_growth_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    cash_reinvestment: float = Field(..., gt=-1e10, lt=1e10)
+    current_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    quick_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    interest_expense_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    total_debt_to_total_net_worth: float = Field(..., gt=-1e10, lt=1e10)
+    debt_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    net_worth_to_assets: float = Field(..., gt=-1e10, lt=1e10)
+    long_term_fund_suitability_ratio_a: float = Field(..., gt=-1e10, lt=1e10)
+    borrowing_dependency: float = Field(..., gt=-1e10, lt=1e10)
+    contingent_liabilities_to_net_worth: float = Field(..., gt=-1e10, lt=1e10)
+    operating_profit_to_paid_in_capital: float = Field(..., gt=-1e10, lt=1e10)
+    net_profit_before_tax_to_paid_in_capital: float = Field(..., gt=-1e10, lt=1e10)
+    inventory_and_receivables_to_net_value: float = Field(..., gt=-1e10, lt=1e10)
+    total_asset_turnover: float = Field(..., gt=-1e10, lt=1e10)
+    accounts_receivable_turnover: float = Field(..., gt=-1e10, lt=1e10)
+    average_collection_days: float = Field(..., gt=-1e10, lt=1e10)
+    inventory_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    fixed_assets_turnover_frequency: float = Field(..., gt=-1e10, lt=1e10)
+    net_worth_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    revenue_per_person: float = Field(..., gt=-1e10, lt=1e10)
+    operating_profit_per_person: float = Field(..., gt=-1e10, lt=1e10)
+    allocation_rate_per_person: float = Field(..., gt=-1e10, lt=1e10)
+    working_capital_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    quick_assets_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    current_assets_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    cash_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    quick_assets_to_current_liability: float = Field(..., gt=-1e10, lt=1e10)
+    cash_to_current_liability: float = Field(..., gt=-1e10, lt=1e10)
+    current_liability_to_assets: float = Field(..., gt=-1e10, lt=1e10)
+    operating_funds_to_liability: float = Field(..., gt=-1e10, lt=1e10)
+    inventory_to_working_capital: float = Field(..., gt=-1e10, lt=1e10)
+    inventory_to_current_liability: float = Field(..., gt=-1e10, lt=1e10)
+    current_liabilities_to_liability: float = Field(..., gt=-1e10, lt=1e10)
+    working_capital_to_equity: float = Field(..., gt=-1e10, lt=1e10)
+    current_liabilities_to_equity: float = Field(..., gt=-1e10, lt=1e10)
+    long_term_liability_to_current_assets: float = Field(..., gt=-1e10, lt=1e10)
+    retained_earnings_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    total_income_to_total_expense: float = Field(..., gt=-1e10, lt=1e10)
+    total_expense_to_assets: float = Field(..., gt=-1e10, lt=1e10)
+    current_asset_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    quick_asset_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    working_capital_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    cash_turnover_rate: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_to_sales: float = Field(..., gt=-1e10, lt=1e10)
+    fixed_assets_to_assets: float = Field(..., gt=-1e10, lt=1e10)
+    current_liability_to_liability: float = Field(..., gt=-1e10, lt=1e10)
+    current_liability_to_equity: float = Field(..., gt=-1e10, lt=1e10)
+    equity_to_long_term_liability: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_to_liability: float = Field(..., gt=-1e10, lt=1e10)
+    cfo_to_assets: float = Field(..., gt=-1e10, lt=1e10)
+    cash_flow_to_equity: float = Field(..., gt=-1e10, lt=1e10)
+    current_liability_to_current_assets: float = Field(..., gt=-1e10, lt=1e10)
+    liability_assets_flag: float = Field(..., gt=-1e10, lt=1e10)
+    net_income_to_total_assets: float = Field(..., gt=-1e10, lt=1e10)
+    total_assets_to_gnp_price: float = Field(..., gt=-1e10, lt=1e10)
+    no_credit_interval: float = Field(..., gt=-1e10, lt=1e10)
+    gross_profit_to_sales: float = Field(..., gt=-1e10, lt=1e10)
+    net_income_to_stockholders_equity: float = Field(..., gt=-1e10, lt=1e10)
+    liability_to_equity: float = Field(..., gt=-1e10, lt=1e10)
+    degree_of_financial_leverage: float = Field(..., gt=-1e10, lt=1e10)
+    interest_coverage_ratio: float = Field(..., gt=-1e10, lt=1e10)
+    net_income_flag: float = Field(..., gt=-1e10, lt=1e10)
+    equity_to_liability: float = Field(..., gt=-1e10, lt=1e10)
+
+    @field_validator("*")
+    @classmethod
+    def validate_floats(cls, v, field):
+        if isinstance(v, float) and (math.isnan(v) or math.isinf(v)):
+            raise ValueError(f"{field.name} must be a finite float (no NaN or Inf allowed)")
+        return float(v)
