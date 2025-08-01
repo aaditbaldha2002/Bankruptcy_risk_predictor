@@ -30,7 +30,7 @@ def build_s3_mapping(dir_listing, s3_bucket):
         file_name = os.path.basename(entry["relpath"])
         file_hash = entry["md5"]
         s3_key=f"{file_hash[:2]}/{file_hash[2:]}"
-        s3_url = f"{s3_bucket}/files/md5/{s3_key}"
+        s3_url = f"dvc-store/files/md5/{s3_key}"
         mapping[file_name] = s3_url
     return mapping
 
@@ -48,7 +48,7 @@ s3 = boto3.client('s3')
 # Define file and bucket details
 file_path = 'dvc_artifact_manifest.json'
 bucket_name = os.environ.get("S3_BUCKET_NAME").split('/')[2]
-s3_key = 'artifacts_mapping.json'
+s3_key = 'dvc_artifact_manifest.json'
 
 # Upload the file
 s3.upload_file(file_path, bucket_name, s3_key)
