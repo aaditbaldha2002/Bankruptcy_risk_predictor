@@ -1,6 +1,6 @@
 outs:
-- md5: 4c40d1be8b8ac53e977355f28ffe621b.dir
-  size: 1133789
+- md5: 27a682cc4c8dcf61f1c08e2278aa0eff.dir
+  size: 1135902
   nfiles: 5
   hash: md5
   path: classifier
