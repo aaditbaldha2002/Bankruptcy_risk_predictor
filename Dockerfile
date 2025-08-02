@@ -1,32 +1,15 @@
-# Base image: lightweight, Python 3.10+ (adjust per your needs)
-FROM python:3.10-slim
+FROM public.ecr.aws/lambda/python:3.10
 
 # Set working directory
 WORKDIR /app
 
-# Install system dependencies for ML, ZenML, and your pipeline
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
+COPY src/apis/predict/requirements.txt ./requirements.txt
 
-# Copy only requirements first for caching
-COPY requirements.txt .
+RUN pip install --no-cache-dir -r requirements.txt
 
-# Install Python dependencies with pinned versions
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install -r requirements.txt
-
-# Copy the entire project source
 COPY . .
 
-# Environment variables (example: disable cache if needed)
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Expose ports if you have a server or API (example 8080)
-# EXPOSE 8080
-
-# Run your ZenML pipeline or entrypoint script
-CMD ["python", "-m", "src.main"]  # Adjust to your main script or entrypoint
-
+CMD ["src.deployments.lambda.lambda_handler.handler"]
