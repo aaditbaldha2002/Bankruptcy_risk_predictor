@@ -52,3 +52,14 @@ jobs:
 
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
+      
+      - name: Tracking artifacts using DVC 
+        run: dvc add artifacts/
+             git add artifacts.dvc
+             git commit -m "tracking artifacts using dvc"
+      - name: Pushing artifacts to S3 remote bucket
+        run:  git push
+              dvc push
+      
+      - name: Pushing artifacts mapping to S3 remote bucket
+        run: python src/create_artifacts_mapping.py
