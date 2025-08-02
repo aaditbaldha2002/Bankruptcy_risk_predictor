@@ -21,12 +21,13 @@ lambda_local_test.py
 lambda-api.zip
 LICENSE
 main.py
-README.model_registry
+README.md
 requirements.txt
 run_deploy_pipeline.py
 run_inference_pipeline.py
 setup_inference_data.py
 zenml_stack.yaml
+src/apis/predict/__pycache__/
 
 src/*
 !src/apis/
