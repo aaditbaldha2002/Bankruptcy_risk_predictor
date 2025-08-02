@@ -51,3 +51,6 @@ env/
 #Deployment files
 deploy_package/
 lambda-api.zip
+
+#Model registry
+model_registry/
