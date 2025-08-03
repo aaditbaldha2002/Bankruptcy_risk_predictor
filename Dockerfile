@@ -1,32 +1,30 @@
-# Base image: lightweight, Python 3.10+ (adjust per your needs)
-FROM python:3.10-slim
+# ----------- Builder stage -----------
+FROM python:3.10-slim AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Install system dependencies for ML, ZenML, and your pipeline
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    build-essential \
-    git \
-    curl \
-    && rm -rf /var/lib/apt/lists/*
-
 # Copy only requirements first for caching
-COPY requirements.txt .
+COPY src/apis/predict/requirements.txt ./requirements.txt
 
-# Install Python dependencies with pinned versions
-RUN pip install --upgrade pip setuptools wheel
-RUN pip install -r requirements.txt
+# Build wheels for dependencies (no cache to keep slim)
+RUN pip wheel --wheel-dir=/wheels --no-cache-dir -r requirements.txt
 
-# Copy the entire project source
-COPY . .
+# ----------- Final stage -----------
+FROM public.ecr.aws/lambda/python:3.10
 
-# Environment variables (example: disable cache if needed)
+WORKDIR /app
+
+# Copy wheels from builder and install without cache
+COPY --from=builder /wheels /wheels
+COPY src/apis/predict/requirements.txt ./requirements.txt
+RUN pip install --no-index --find-links=/wheels --no-cache-dir -r requirements.txt && \
+    rm -rf /var/cache/apt/* /var/lib/apt/lists/*
+
+# Copy only needed source files, avoid copying everything blindly
+COPY src/apis/ ./src/apis/
+COPY src/__init__.py ./src/__init__.py
+
+ENV PYTHONDONTWRITEBYTECODE=1
 ENV PYTHONUNBUFFERED=1
 
-# Expose ports if you have a server or API (example 8080)
-# EXPOSE 8080
-
-# Run your ZenML pipeline or entrypoint script
-CMD ["python", "-m", "src.main"]  # Adjust to your main script or entrypoint
-
+CMD ["src.deployments.lambda.lambda_handler.handler"]

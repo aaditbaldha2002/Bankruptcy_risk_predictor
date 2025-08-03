@@ -5,10 +5,8 @@ import pandas as pd
 from src.apis.predict.constants import FEATURE_NAMES
 from src.apis.predict.make_prediction import make_prediction
 from src.apis.predict.schemas import BankruptcyPredictionInput, BankruptcyPredictionResponse
-from mangum import Mangum
 
 app=FastAPI()
-handler=Mangum(app)
 
 @app.post("/predict",tags=['Prediction'],response_model=BankruptcyPredictionResponse)
 def predict(payload: BankruptcyPredictionInput):

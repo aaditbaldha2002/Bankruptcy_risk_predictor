@@ -1,6 +1,0 @@
-outs:
-- md5: 13a1b5cfbe922edf95a12246467d1e39.dir
-  size: 1133789
-  nfiles: 5
-  hash: md5
-  path: classifier

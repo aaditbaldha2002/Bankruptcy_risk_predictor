@@ -41,3 +41,16 @@ htmlcov/
 pytest_cache/
 /artifacts
 /data
+
+#Env files
+venv/
+lambda-api-env/
+env/
+.lambda_env/
+
+#Deployment files
+deploy_package/
+lambda-api.zip
+
+#Model registry
+model_registry/

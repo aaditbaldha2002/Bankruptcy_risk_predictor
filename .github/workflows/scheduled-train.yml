@@ -5,6 +5,9 @@ on:
     - cron: '0 6 * * *'  # Every day at 6:00 UTC
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   train:
     runs-on: ubuntu-latest
@@ -13,6 +16,7 @@ jobs:
       AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
       S3_BUCKET_NAME: ${{ secrets.S3_BUCKET_NAME }}
       AWS_DEFAULT_REGION: 'us-east-1'
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 
     steps:
       - name: Checkout code
@@ -26,14 +30,14 @@ jobs:
       - name: Install dependencies
         run: |
           pip install -r requirements.txt
-          pip install dvc[s3]  # Ensures S3 support
+          pip install dvc[s3] zenml
 
       - name: Configure DVC remote
         run: |
           dvc remote modify s3remote access_key_id $AWS_ACCESS_KEY_ID
           dvc remote modify s3remote secret_access_key $AWS_SECRET_ACCESS_KEY
           dvc remote modify s3remote region $AWS_DEFAULT_REGION
-          dvc remote default s3remote  # Make it the default
+          dvc remote default s3remote
 
       - name: Pull DVC data/artifacts
         run: |
@@ -52,3 +56,23 @@ jobs:
 
       - name: Run ZenML pipeline
         run: python run_deploy_pipeline.py
+
+      - name: Track artifacts using DVC
+        run: |
+          dvc add artifacts/
+          git add artifacts.dvc
+          if git diff --cached --quiet; then
+            echo "No DVC metadata changes to commit."
+          else
+            git config --global user.name "github-actions[bot]"
+            git config --global user.email "github-actions[bot]@users.noreply.github.com"
+            git commit -m "tracking artifacts using DVC [skip ci]"
+          fi
+
+      - name: Push changes to Git and DVC remote
+        run: |
+          git push https://x-access-token:${GITHUB_TOKEN}@github.com/${{ github.repository }} HEAD:${{ github.ref_name }}
+          dvc push
+
+      - name: Push artifacts mapping (metadata)
+        run: python src/create_artifacts_mapping.py
